@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://BobbyTang.github.io/sitemap.xml 
