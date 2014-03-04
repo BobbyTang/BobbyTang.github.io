@@ -4,7 +4,7 @@
   <title><![CDATA[BobbyTang Blog]]></title>
   <link href="http://BobbyTang.github.io/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
-  <updated>2014-03-05T05:48:57+08:00</updated>
+  <updated>2014-03-05T05:52:35+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
   <author>
     <name><![CDATA[BobbyTang]]></name>
@@ -21,18 +21,18 @@
     <content type="html"><![CDATA[<p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.
 Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system. Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
 
-<h2>storage device hierarchy</h2>
+<h2>Storage Device Hierarchy</h2>
 
 <p>registers &mdash; > cache &mdash; > main memory (RAM random access memory) &mdash; > electronic disk &mdash; > magnetic disk &mdash; > optical disk &mdash; > magnetic tapes</p>
 
-<h2>symmetric multiprocessing (SMP)</h2>
+<h2>Symmetric Multiprocessing (SMP)</h2>
 
 <p>SMP systems are tightly coupled multiprocessor systems with a pool of homogeneous processors running independently, each processor executing different programs and working on different data and with capability of sharing common resources (memory, I/O device, interrupt system and so on) and connected using a system bus or a crossbar.</p>
 
 <pre><code>uname -a
 </code></pre>
 
-<h2>non-uniform memory access (NUMA)</h2>
+<h2>Non-uniform Memory Access (NUMA)</h2>
 
 <p>NUMA is a computer memory design used in multiprocessing, where the memory access time depends on the memory location relative to the processor. Under NUMA, a processor can access its own local memory faster than non-local memory (memory local to another processor or memory shared between processors).</p>
 
@@ -45,14 +45,14 @@ If you want see the detail, please see <a href="http://docs.oracle.com/javase/7/
 </ul>
 
 
-<h2>clustering</h2>
+<h2>Clustering</h2>
 
 <p>Clustering can be structured asymmetrically or symmetrically. In asymmetric clustering, one machine is in hot-standby mode while the other is running the applications. The hot-standby host machine does nothing but monitor the active server. If that server fails, the hot-standby host becomes the active server. In symmetric mode, two or more hosts are running applications and are monitoring each other. This mode is obviously more efficient, as it uses all of the available hardware. It does require that more than one application be available to run.
 For example in real-world scenario:
 The secondary EMS server is hot-standby mode.
 Two Weblogic servers are symmetric mode and load balance.</p>
 
-<h2>network</h2>
+<h2>Network</h2>
 
 <h3>local area network (LAN)</h3>
 
@@ -66,7 +66,7 @@ Two Weblogic servers are symmetric mode and load balance.</p>
 
 <p>A wide area network (WAN) is a network that covers a broad area (i.e., any telecommunications network that links across metropolitan, regional, or national boundaries) using private or public network transports. WANs are often built using leased lines. WANs can also be built using less costly circuit switching or packet switching methods.</p>
 
-<h2>computing environments</h2>
+<h2>Computing Environments</h2>
 
 <h3>traditional computing</h3>
 
@@ -89,7 +89,7 @@ Time-sharing systems are an extension of multiprogramming wherein CPU scheduling
 
 <h3>web-based computing</h3>
 
-<h2>system calls</h2>
+<h2>System Calls</h2>
 
 <p>In computing, a system call is how a program requests a service from an operating system&rsquo;s kernel.
 System calls provide an essential interface between a process and the operating system.
@@ -100,7 +100,7 @@ System calls can be grouped roughly into six major categories: process control, 
 </ul>
 
 
-<h2>interprocess communication</h2>
+<h2>Interprocess Communication</h2>
 
 <p>There are two common models of interprocess communication:</p>
 
@@ -214,7 +214,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://example.com/">http://example.com/</a>
-<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x61;&#100;&#100;&#x72;&#x65;&#x73;&#x73;&#x40;&#101;&#120;&#x61;&#109;&#112;&#108;&#x65;&#46;&#x63;&#x6f;&#109;">&#x61;&#x64;&#100;&#114;&#101;&#x73;&#115;&#64;&#101;&#x78;&#x61;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#111;&#x6d;</a></p>
+<a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x61;&#x64;&#100;&#114;&#x65;&#x73;&#115;&#64;&#x65;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;">&#97;&#x64;&#x64;&#114;&#x65;&#x73;&#x73;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a></p>
 
 <h3>Blackslash escapes</h3>
 
