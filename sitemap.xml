@@ -2,7 +2,13 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://BobbyTang.github.io/blog/2014/01/01/first-post/</loc>
-        <lastmod>2014-01-07T01:24:01+08:00</lastmod>
+        <lastmod>2014-03-05T05:35:20+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://BobbyTang.github.io/blog/2014/03/05/operating-system-concepts-terminology/
+        </loc>
+        <lastmod>2014-03-05T05:48:46+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/about/</loc>
@@ -10,11 +16,11 @@
     </url>
     <url>
         <loc>http://BobbyTang.github.io/blog/archives/</loc>
-        <lastmod>2014-01-07T01:24:01+08:00</lastmod>
+        <lastmod>2014-03-05T05:48:46+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/</loc>
-        <lastmod>2014-01-07T01:24:01+08:00</lastmod>
+        <lastmod>2014-03-05T05:48:46+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/robots.txt</loc>
