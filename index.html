@@ -9,8 +9,8 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.
-Before starting with &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -39,7 +39,7 @@ Before starting with &hellip;">
   <header role="banner"><hgroup>
   <h1><a href="/">BobbyTang Blog</a></h1>
   
-    <h2>A blogging framework for hackers.</h2>
+    <h2>Share more, Gain more.</h2>
   
 </hgroup>
 
@@ -66,6 +66,131 @@ Before starting with &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">SQL - SybaseASE - Alternative Way to Support LEAD/LAG Function</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-10T01:32:05+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/">SQL - Switch/Transpose Columns and Rows</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-10T00:28:27+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In practice, we will meet the requirement to rotate the table including convert cols to rows, convert rows to cols. In this session, I&rsquo;ll produce the solution in common method as well as db-specified features.</p>
+
+<h2>Convert columns to rows</h2>
+
+<pre><code>--common solution
+select * from (
+    select id, 'col_1' as col_name, col_1 as col_val
+    from table
+    union all
+    select id, 'col_2' as col_name, col_2 as col_val
+    from table
+    union all
+    ... 
+) order by id
+
+--oracle 11g unpivot query
+select *
+from table
+unpivot (
+    col_val for col_name in (col_1 as 'col_1', col_2 as 'col_2')
+)
+order by id
+</code></pre>
+
+<h2>Concert rows to columns</h2>
+
+<pre><code>--common solution
+select id,
+    max(case when col_name = 'col_1' then col_val else null end) as col_1,
+    max(case when col_name = 'col_2' then col_val else null end) as col_2,
+    ...
+from table
+order by id
+
+
+--oracle 11g pivot query
+select *
+from table
+pivot (
+    max(col_val) for col_name in ('col_1' as col_1,'col_2' as col_2)
+)
+where ...
+order by id
+</code></pre>
+
+<h2>Excel pivot table</h2>
+
+<p>For non-sql approaches, we can use excel pivot table. Excel spreadsheets are a great way to pivot and analyze Oracle data, and tools.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -324,7 +449,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://example.com/">http://example.com/</a>
-<a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x61;&#x64;&#100;&#114;&#x65;&#x73;&#115;&#64;&#x65;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;">&#97;&#x64;&#x64;&#114;&#x65;&#x73;&#x73;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#100;&#100;&#114;&#x65;&#x73;&#115;&#x40;&#101;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#46;&#99;&#111;&#109;">&#x61;&#100;&#100;&#114;&#101;&#115;&#115;&#64;&#x65;&#120;&#x61;&#109;&#112;&#108;&#101;&#46;&#x63;&#111;&#109;</a></p>
 
 <h3>Blackslash escapes</h3>
 
@@ -361,6 +486,14 @@ _   underscore
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">SQL - SybaseASE - Alternative Way to Support LEAD/LAG Function</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/">SQL - Switch/Transpose Columns and Rows</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/05/operating-system-concepts-terminology/">Operating System Concepts - Terminology</a>

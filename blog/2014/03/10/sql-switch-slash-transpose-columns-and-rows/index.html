@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>About - BobbyTang Blog</title>
+  <title>SQL - Switch/Transpose Columns and Rows - BobbyTang Blog</title>
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="About Jan 1st, 2014 Jan 1st, 2014 Comments Please enable JavaScript to view the comments powered by Disqus. Recent Posts SQL - SybaseASE - &hellip;">
+  <meta name="description" content="In practice, we will meet the requirement to rotate the table including convert cols to rows, convert rows to cols. In this session, I&rsquo;ll &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://BobbyTang.github.io/about">
+  <link rel="canonical" href="http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="BobbyTang Blog" type="application/atom+xml">
@@ -64,32 +64,15 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">About</h1>
-    <p class="meta">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-01T11:31:00+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time></p>
-  </header>
-  
-  
-
-  
-    <footer>
+    
+      <h1 class="entry-title">SQL - Switch/Transpose Columns and Rows</h1>
+    
+    
       <p class="meta">
         
-        
 
 
 
@@ -101,19 +84,108 @@
   
 
 
-<time datetime="2014-01-01T11:31:00+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+<time datetime="2014-03-10T00:28:27+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io">Comments</a>
         
       </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In practice, we will meet the requirement to rotate the table including convert cols to rows, convert rows to cols. In this session, I&rsquo;ll produce the solution in common method as well as db-specified features.</p>
+
+<h2>Convert columns to rows</h2>
+
+<pre><code>--common solution
+select * from (
+    select id, 'col_1' as col_name, col_1 as col_val
+    from table
+    union all
+    select id, 'col_2' as col_name, col_2 as col_val
+    from table
+    union all
+    ... 
+) order by id
+
+--oracle 11g unpivot query
+select *
+from table
+unpivot (
+    col_val for col_name in (col_1 as 'col_1', col_2 as 'col_2')
+)
+order by id
+</code></pre>
+
+<h2>Concert rows to columns</h2>
+
+<pre><code>--common solution
+select id,
+    max(case when col_name = 'col_1' then col_val else null end) as col_1,
+    max(case when col_name = 'col_2' then col_val else null end) as col_2,
+    ...
+from table
+order by id
+
+
+--oracle 11g pivot query
+select *
+from table
+pivot (
+    max(col_val) for col_name in ('col_1' as col_1,'col_2' as col_2)
+)
+where ...
+order by id
+</code></pre>
+
+<h2>Excel pivot table</h2>
+
+<p>For non-sql approaches, we can use excel pivot table. Excel spreadsheets are a great way to pivot and analyze Oracle data, and tools.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
+  
+
+<span class="byline author vcard">Posted by <span class="fn">BobbyTang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-10T00:28:27+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2014/03/05/operating-system-concepts-terminology/" title="Previous Post: Operating system concepts - Terminology">&laquo; Operating system concepts - Terminology</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/" title="Next Post: SQL - SybaseASE - Alternative way to support LEAD/LAG function">SQL - SybaseASE - Alternative way to support LEAD/LAG function &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
   <section>
@@ -172,8 +244,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://BobbyTang.github.io/about/index.html';
-        var disqus_url = 'http://BobbyTang.github.io/about/index.html';
+        var disqus_identifier = 'http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/';
+        var disqus_url = 'http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/';
         var disqus_script = 'embed.js';
       
     (function () {
