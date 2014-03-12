@@ -102,11 +102,14 @@ Before starting with topic, I am going to reveal why I try to read books of OS r
 
 <p>registers &mdash; > cache &mdash; > main memory (RAM random access memory) &mdash; > electronic disk &mdash; > magnetic disk &mdash; > optical disk &mdash; > magnetic tapes</p>
 
+<p><img src="../images/cpu_cache_hierarchy.png" title="CPU cache hierarchy" alt="Alt text" /></p>
+
 <h2>Symmetric Multiprocessing (SMP)</h2>
 
 <p>SMP systems are tightly coupled multiprocessor systems with a pool of homogeneous processors running independently, each processor executing different programs and working on different data and with capability of sharing common resources (memory, I/O device, interrupt system and so on) and connected using a system bus or a crossbar.</p>
 
-<pre><code>uname -a
+<pre><code>$uname -a
+Linux [nodename] 2.6.18-348.18.l.e15 #1 SMP [date] x86_64 x86_64 GUN/Linux
 </code></pre>
 
 <h2>Non-uniform Memory Access (NUMA)</h2>
@@ -172,10 +175,11 @@ Time-sharing systems are an extension of multiprogramming wherein CPU scheduling
 System calls provide an essential interface between a process and the operating system.
 System calls can be grouped roughly into six major categories: process control, file manipulation, device manipulation, information maintenance, communications, and protection.</p>
 
-<ul>
-<li>Strace is used for debugging and troubleshooting the execution of an executable on Linux environment. It displays the system calls used by the process, and the signals received by the process.</li>
-</ul>
+<p>To monitor and trace the system call within the process, we can use strace command in Linux.
+Strace is used for debugging and troubleshooting the execution of an executable on Linux environment. It displays the system calls used by the process, and the signals received by the process.</p>
 
+<pre><code>$strace
+</code></pre>
 
 <h2>Interprocess Communication</h2>
 
