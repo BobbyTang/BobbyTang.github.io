@@ -9,7 +9,7 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="There is audit trial requirement that need to be captured into log table these day. But we suffer from the limited function provided by Sybase ASE DB &hellip;">
+  <meta name="description" content="Process Control Block Process Control Block (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,79 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-25T05:57:31+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Process Control Block</h2>
+
+<p><code>Process Control Block</code> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
+
+<p>Process state. The state may be new, ready, running, waiting, halted, and so on.</p>
+
+<p>Program counter. The counter indicates the address of the next instruction to be executed for this process.</p>
+
+<p>CPU registers. They include accumulators, index registers, stack pointers, and general-purpose registers, plus any condition-code information. Along with the program counter, this state information must be saved when an interrupt occurs, to allow the process to be continued correctly afterward.</p>
+
+<p>CPU-scheduling information. This information includes a process priority, pointers to scheduling queues, and any other scheduling parameters.</p>
+
+<p>Memory-management information. This information may include such information as the value of the base and limit registers, the page tables, or the segment tables, depending on the memory system used by the operating system.</p>
+
+<p>Accounting information. This information includes the amount of CPU and real time used, time limits, account numbers, job or process numbers, and so on.</p>
+
+<p>I/O status information. This information includes the list of I/O devices allocated to the process, a list of open files, and so on.</p>
+
+<h2>Context Switch</h2>
+
+<p>A <code>context switch</code> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
+
+<p>A context is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
+
+<p>A program counter is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
+
+<p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
+
+<p>(1) suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p>
+
+<p>(2) retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p>
+
+<p>(3) returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p>
+
+<h3>When to switch?</h3>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -246,7 +319,7 @@ Before starting with topic, I am going to reveal why I try to read books of OS r
 
 <p>registers &mdash; > cache &mdash; > main memory (RAM random access memory) &mdash; > electronic disk &mdash; > magnetic disk &mdash; > optical disk &mdash; > magnetic tapes</p>
 
-<p><img src="../images/cpu_cache_hierarchy.png" title="CPU cache hierarchy" alt="Alt text" /></p>
+<p><img src="/images/cpu_cache_hierarchy.png" title="CPU cache hierarchy" alt="Alt text" /></p>
 
 <h2>2.Symmetric Multiprocessing (SMP)</h2>
 
@@ -305,9 +378,9 @@ If you want see the detail, please see <a href="http://docs.oracle.com/javase/7/
 
 <p><code>Remote method invocation (RMI)</code> is a Java feature similar to RPCs.</p>
 
-<h3>6.3peer-to-peer computing</h3>
+<h3>6.3.peer-to-peer computing</h3>
 
-<h3>6.4web-based computing</h3>
+<h3>6.4.web-based computing</h3>
 
 <h2>7.System Calls</h2>
 
@@ -467,7 +540,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://example.com/">http://example.com/</a>
-<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#97;&#100;&#100;&#x72;&#101;&#x73;&#x73;&#64;&#101;&#x78;&#97;&#109;&#112;&#108;&#101;&#x2e;&#99;&#x6f;&#109;">&#x61;&#x64;&#x64;&#114;&#x65;&#x73;&#x73;&#x40;&#101;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#x64;&#100;&#114;&#101;&#115;&#x73;&#64;&#x65;&#120;&#97;&#x6d;&#x70;&#108;&#101;&#x2e;&#99;&#111;&#x6d;">&#97;&#x64;&#x64;&#114;&#x65;&#x73;&#115;&#64;&#x65;&#120;&#97;&#109;&#112;&#x6c;&#x65;&#46;&#x63;&#x6f;&#x6d;</a></p>
 
 <h3>Blackslash escapes</h3>
 
@@ -504,6 +577,10 @@ _   underscore
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">SQL - SybaseASE - Alternative Way to Support LEAD/LAG Function</a>
