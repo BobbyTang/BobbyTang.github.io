@@ -116,19 +116,80 @@
 
 <p>A <code>context switch</code> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
 
-<p>A context is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
+<p>A <code>context</code> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
 
-<p>A program counter is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
+<p>A <code>program counter</code> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
 
 <p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
 
-<p>(1) suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p>
+<ol>
+<li><p>suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p></li>
+<li><p>retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p></li>
+<li><p>returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p></li>
+</ol>
 
-<p>(2) retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p>
-
-<p>(3) returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p>
 
 <h3>When to switch?</h3>
+
+<p>Context switches can occur only in kernel mode.</p>
+
+<p><code>Multitasking</code> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
+
+<p><code>Interrupt handling</code> 1.) Hardware interrupt</p>
+
+<p><code>User and kernel mode switching</code> may cause context switch.</p>
+
+<h2>Multithread programing</h2>
+
+<p>Benifits 1.) Responsiveness 2.)Resource sharing 3.) Economy 4.)Scalability</p>
+
+<h2>Multicore Programming</h2>
+
+<p>Concerns 1.) Dividing activities 2.)Balance Data splitting 3.)Data dependency 4.)Testing and debugging</p>
+
+<h2>Multithread Model</h2>
+
+<ul>
+<li>Many-to-one model</li>
+<li>One-to-one model</li>
+</ul>
+
+
+<p>The nptl(native posix thread library) implementation only uses a 1:1 thread model. The scheduler handles every thread as if it were a process. Therefore only the supported scope is PTHREAD_SCOPE_SYSTEM(Plesae see on Pthread Scheduling label). The default scheduling policy is SCHED_OTHER, which is the default Linux scheduler. The nptl implementation can utilize multiple CPUs.</p>
+
+<ul>
+<li>Many-to-many model</li>
+<li>Green thread</li>
+</ul>
+
+
+<p>On multi-CPU machines, native threads can run more than one thread simultaneously by assigning different threads to different CPUs. Green threads run on only one CPU.</p>
+
+<p>Green threads, the threads provided by the JVM, run at the user level, meaning that the JVM creates and schedules the threads itself. Therefore, the operating system kernel doesn&rsquo;t create or schedule them. Instead, the underlying OS sees the JVM only as one thread.</p>
+
+<ul>
+<li>Light weight process(LWP)
+In the traditional meaning of the term, as used in Unix System V and Solaris, a LWP runs in user space on top of a single kernel thread and shares its address space and system resources with other LWPs within the same process.</li>
+</ul>
+
+
+<h2>Pthread Scheduling</h2>
+
+<p>There are two possible contention scopes. PTHREAD_SCOPE_SYSTEM and PTHREAD_SCOPE_PROCESS. They can be set with pthread_attr_setscope(). The scope of a thread can only be specified before the thread is created.</p>
+
+<ul>
+<li>PTHREAD_SCOPE_SYSTEM</li>
+</ul>
+
+
+<p>A thread that has a scope of PTHREAD_SCOPE_SYSTEM will content with other processes and other PTHREAD_SCOPE_SYSTEM threads for the CPU.</p>
+
+<ul>
+<li>PTHREAD_SCOPE_PROCESS</li>
+</ul>
+
+
+<p>All threads of a process that have a scope of PTHREAD_SCOPE_PROCESS will be grouped together and this group of threads contents for the CPU. If there is a process with 4 PTHREAD_SCOPE_PROCESS threads and 4 PTHREAD_SCOPE_SYSTEM threds, then each of the PTHREAD_SCOPE_SYSTEM threads will get a fifth of the CPU and the other 4 PTHREAD_SCOPE_PROCESS threads will share the remaing fifth of the CPU. How the PTHREAD_SCOPE_PROCESS threads share their fifth of the CPU among themselves is determined by the scheduling policy and the thread&rsquo;s priority.</p>
 </div>
 
 

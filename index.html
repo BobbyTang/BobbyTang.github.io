@@ -119,19 +119,80 @@
 
 <p>A <code>context switch</code> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
 
-<p>A context is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
+<p>A <code>context</code> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
 
-<p>A program counter is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
+<p>A <code>program counter</code> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
 
 <p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
 
-<p>(1) suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p>
+<ol>
+<li><p>suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p></li>
+<li><p>retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p></li>
+<li><p>returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p></li>
+</ol>
 
-<p>(2) retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p>
-
-<p>(3) returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p>
 
 <h3>When to switch?</h3>
+
+<p>Context switches can occur only in kernel mode.</p>
+
+<p><code>Multitasking</code> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
+
+<p><code>Interrupt handling</code> 1.) Hardware interrupt</p>
+
+<p><code>User and kernel mode switching</code> may cause context switch.</p>
+
+<h2>Multithread programing</h2>
+
+<p>Benifits 1.) Responsiveness 2.)Resource sharing 3.) Economy 4.)Scalability</p>
+
+<h2>Multicore Programming</h2>
+
+<p>Concerns 1.) Dividing activities 2.)Balance Data splitting 3.)Data dependency 4.)Testing and debugging</p>
+
+<h2>Multithread Model</h2>
+
+<ul>
+<li>Many-to-one model</li>
+<li>One-to-one model</li>
+</ul>
+
+
+<p>The nptl(native posix thread library) implementation only uses a 1:1 thread model. The scheduler handles every thread as if it were a process. Therefore only the supported scope is PTHREAD_SCOPE_SYSTEM(Plesae see on Pthread Scheduling label). The default scheduling policy is SCHED_OTHER, which is the default Linux scheduler. The nptl implementation can utilize multiple CPUs.</p>
+
+<ul>
+<li>Many-to-many model</li>
+<li>Green thread</li>
+</ul>
+
+
+<p>On multi-CPU machines, native threads can run more than one thread simultaneously by assigning different threads to different CPUs. Green threads run on only one CPU.</p>
+
+<p>Green threads, the threads provided by the JVM, run at the user level, meaning that the JVM creates and schedules the threads itself. Therefore, the operating system kernel doesn&rsquo;t create or schedule them. Instead, the underlying OS sees the JVM only as one thread.</p>
+
+<ul>
+<li>Light weight process(LWP)
+In the traditional meaning of the term, as used in Unix System V and Solaris, a LWP runs in user space on top of a single kernel thread and shares its address space and system resources with other LWPs within the same process.</li>
+</ul>
+
+
+<h2>Pthread Scheduling</h2>
+
+<p>There are two possible contention scopes. PTHREAD_SCOPE_SYSTEM and PTHREAD_SCOPE_PROCESS. They can be set with pthread_attr_setscope(). The scope of a thread can only be specified before the thread is created.</p>
+
+<ul>
+<li>PTHREAD_SCOPE_SYSTEM</li>
+</ul>
+
+
+<p>A thread that has a scope of PTHREAD_SCOPE_SYSTEM will content with other processes and other PTHREAD_SCOPE_SYSTEM threads for the CPU.</p>
+
+<ul>
+<li>PTHREAD_SCOPE_PROCESS</li>
+</ul>
+
+
+<p>All threads of a process that have a scope of PTHREAD_SCOPE_PROCESS will be grouped together and this group of threads contents for the CPU. If there is a process with 4 PTHREAD_SCOPE_PROCESS threads and 4 PTHREAD_SCOPE_SYSTEM threds, then each of the PTHREAD_SCOPE_SYSTEM threads will get a fifth of the CPU and the other 4 PTHREAD_SCOPE_PROCESS threads will share the remaing fifth of the CPU. How the PTHREAD_SCOPE_PROCESS threads share their fifth of the CPU among themselves is determined by the scheduling policy and the thread&rsquo;s priority.</p>
 </div>
   
   
@@ -312,8 +373,11 @@ order by id
   </header>
 
 
-  <div class="entry-content"><p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.
-Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system. Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
+  <div class="entry-content"><p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.</p>
+
+<p>Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system.</p>
+
+<p>Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
 
 <h2>1.Storage Device Hierarchy</h2>
 
@@ -401,6 +465,10 @@ Strace is used for debugging and troubleshooting the execution of an executable 
 <h3>8.1.message-passing model</h3>
 
 <p><code>Message passing</code> is useful for exchanging smaller amounts of data, because no conflicts need be avoided.</p>
+
+<p>Message passing may be either blocking or nonblocking— also known as synchronous and asynchronous. 1.)<code>Blocking send</code> 2.)<code>Nonblocking send</code> 3.)<code>Blockingreceive</code> 4.)<code>Nonblocking receive</code></p>
+
+<p>Whether communication is direct or indirect, messages exchanged by commu- nicating processes reside in a temporary queue. 1.)<code>Zero capacity</code> 2.)<code>Boundedcapacity</code> 3.)<code>Unboundedcapacity</code></p>
 
 <h3>8.2.shared-memory model</h3>
 
@@ -540,7 +608,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://example.com/">http://example.com/</a>
-<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#x64;&#100;&#114;&#101;&#x73;&#115;&#64;&#101;&#120;&#97;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#97;&#x64;&#100;&#x72;&#101;&#x73;&#x73;&#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;</a></p>
+<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#97;&#100;&#100;&#x72;&#101;&#x73;&#x73;&#x40;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#x2e;&#99;&#111;&#x6d;">&#97;&#x64;&#x64;&#114;&#101;&#115;&#x73;&#64;&#101;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#111;&#109;</a></p>
 
 <h3>Blackslash escapes</h3>
 

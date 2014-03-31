@@ -9,8 +9,7 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.
-Before starting with &hellip;">
+  <meta name="description" content="The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components. Before starting with &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,8 +94,11 @@ Before starting with &hellip;">
   </header>
 
 
-<div class="entry-content"><p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.
-Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system. Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
+<div class="entry-content"><p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.</p>
+
+<p>Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system.</p>
+
+<p>Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
 
 <h2>1.Storage Device Hierarchy</h2>
 
@@ -184,6 +186,10 @@ Strace is used for debugging and troubleshooting the execution of an executable 
 <h3>8.1.message-passing model</h3>
 
 <p><code>Message passing</code> is useful for exchanging smaller amounts of data, because no conflicts need be avoided.</p>
+
+<p>Message passing may be either blocking or nonblocking— also known as synchronous and asynchronous. 1.)<code>Blocking send</code> 2.)<code>Nonblocking send</code> 3.)<code>Blockingreceive</code> 4.)<code>Nonblocking receive</code></p>
+
+<p>Whether communication is direct or indirect, messages exchanged by commu- nicating processes reside in a temporary queue. 1.)<code>Zero capacity</code> 2.)<code>Boundedcapacity</code> 3.)<code>Unboundedcapacity</code></p>
 
 <h3>8.2.shared-memory model</h3>
 
