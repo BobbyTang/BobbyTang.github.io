@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sql | BobbyTang Blog]]></title>
+  <link href="http://BobbyTang.github.io/blog/categories/sql/atom.xml" rel="self"/>
+  <link href="http://BobbyTang.github.io/"/>
+  <updated>2014-04-08T00:01:16+08:00</updated>
+  <id>http://BobbyTang.github.io/</id>
+  <author>
+    <name><![CDATA[BobbyTang]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[SQL - SybaseASE - Alternative Way to Support LEAD/LAG Function]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/"/>
+    <updated>2014-03-10T01:32:05+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function</id>
+    <content type="html"><![CDATA[<p>There is audit trial requirement that need to be captured into log table these day. But we suffer from the limited function provided by Sybase ASE DB in order to achieve our goals. SybaseASE 12.5 does not support neither analytic function nor row number column, and therefore we have to implement cross comparison by ourselves via basic semantics.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="k">create</span> <span class="n">rownum</span> <span class="k">column</span>
+</span><span class='line'><span class="k">select</span> <span class="n">rownum</span> <span class="o">=</span> <span class="k">identity</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="o">*</span> <span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span>
+</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">table_history</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span> <span class="k">order</span> <span class="k">by</span> <span class="n">audit_update_date</span> <span class="k">desc</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="n">use</span> <span class="k">self</span><span class="o">-</span><span class="k">join</span> <span class="k">to</span> <span class="k">match</span> <span class="n">the</span> <span class="k">cross</span> <span class="k">rows</span>
+</span><span class='line'><span class="k">select</span> <span class="n">a</span><span class="p">.</span><span class="n">rownum</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="k">case</span> <span class="k">when</span> <span class="n">a</span><span class="p">.</span><span class="n">col1</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">col1</span> <span class="k">then</span> <span class="s1">&#39;equal&#39;</span> <span class="k">else</span> <span class="s1">&#39;inequal&#39;</span> <span class="k">end</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">a</span> <span class="k">left</span> <span class="k">out</span> <span class="k">join</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">b</span> <span class="k">on</span> <span class="p">(</span> <span class="n">a</span><span class="p">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">pid</span> <span class="k">and</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rownum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">rownum</span> <span class="p">)</span>
+</span><span class='line'><span class="k">where</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>In contrast, we also provide oracle version of implementation.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SQL - Switch/Transpose Columns and Rows]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/"/>
+    <updated>2014-03-10T00:28:27+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows</id>
+    <content type="html"><![CDATA[<p>In practice, we will meet the requirement to rotate the table including convert cols to rows, convert rows to cols. In this session, I&rsquo;ll produce the solution in common method as well as db-specified features.</p>
+
+<h2>Convert columns to rows</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="n">common</span> <span class="n">solution</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">(</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;col_1&#39;</span> <span class="k">as</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_1</span> <span class="k">as</span> <span class="n">col_val</span>
+</span><span class='line'><span class="k">from</span> <span class="k">table</span>
+</span><span class='line'><span class="k">union</span> <span class="k">all</span>
+</span><span class='line'><span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;col_2&#39;</span> <span class="k">as</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_2</span> <span class="k">as</span> <span class="n">col_val</span>
+</span><span class='line'><span class="k">from</span> <span class="k">table</span>
+</span><span class='line'><span class="k">union</span> <span class="k">all</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="n">oracle</span> <span class="mi">11</span><span class="k">g</span> <span class="n">unpivot</span> <span class="n">query</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span>
+</span><span class='line'><span class="k">from</span> <span class="k">table</span>
+</span><span class='line'><span class="n">unpivot</span> <span class="p">(</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">col_val</span> <span class="k">for</span> <span class="n">col_name</span> <span class="k">in</span> <span class="p">(</span><span class="n">col_1</span> <span class="k">as</span> <span class="s1">&#39;col_1&#39;</span><span class="p">,</span> <span class="n">col_2</span> <span class="k">as</span> <span class="s1">&#39;col_2&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">)</span>
+</span><span class='line'><span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Concert rows to columns</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">--common solution</span>
+</span><span class='line'><span class="k">select</span> <span class="n">id</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">max</span><span class="p">(</span><span class="k">case</span> <span class="k">when</span> <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;col_1&#39;</span> <span class="k">then</span> <span class="n">col_val</span> <span class="k">else</span> <span class="k">null</span> <span class="k">end</span><span class="p">)</span> <span class="k">as</span> <span class="n">col_1</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">max</span><span class="p">(</span><span class="k">case</span> <span class="k">when</span> <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;col_2&#39;</span> <span class="k">then</span> <span class="n">col_val</span> <span class="k">else</span> <span class="k">null</span> <span class="k">end</span><span class="p">)</span> <span class="k">as</span> <span class="n">col_2</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'><span class="k">from</span> <span class="k">table</span>
+</span><span class='line'><span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">--oracle 11g pivot query</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span>
+</span><span class='line'><span class="k">from</span> <span class="k">table</span>
+</span><span class='line'><span class="n">pivot</span> <span class="p">(</span>
+</span><span class='line'>    <span class="k">max</span><span class="p">(</span><span class="n">col_val</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;col_1&#39;</span> <span class="k">as</span> <span class="n">col_1</span><span class="p">,</span><span class="s1">&#39;col_2&#39;</span> <span class="k">as</span> <span class="n">col_2</span><span class="p">)</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'><span class="k">where</span> <span class="p">...</span>
+</span><span class='line'><span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Excel pivot table</h2>
+
+<p>For non-sql approaches, we can use excel pivot table. Excel spreadsheets are a great way to pivot and analyze Oracle data, and tools.</p>
+]]></content>
+  </entry>
+  
+</feed>

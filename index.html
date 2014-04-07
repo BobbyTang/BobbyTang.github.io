@@ -9,7 +9,7 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="Process Control Block Process Control Block (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the &hellip;">
+  <meta name="description" content="CPU Scheduling CPU scheduling is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +71,120 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/04/02/operating-system-concepts-cpu/">Operating System Concepts - CPU</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-02T06:30:57+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+        
+           | <a href="/blog/2014/04/02/operating-system-concepts-cpu/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>CPU Scheduling</h2>
+
+<p><strong>CPU scheduling</strong> is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to the selected process by the dispatcher.</p>
+
+<h2>Scheduling Criteria</h2>
+
+<ul>
+<li>CPU utilization</li>
+<li>Throughput</li>
+<li>Turnaround time</li>
+</ul>
+
+
+<p>The interval from the time of submission of a process to the time of completion is the turnaround time. <strong>Turnaround time</strong> is the sum of the periods spent waiting to get into memory, waiting in the ready queue, executing on the CPU, and doing I/O.</p>
+
+<ul>
+<li>Waiting time</li>
+<li>Response time</li>
+</ul>
+
+
+<h2>Scheduling Alogrithm</h2>
+
+<ul>
+<li>First-Come, First-Served Scheduling</li>
+<li>Shortest-Job-First Scheduling</li>
+<li>Priority Scheduling</li>
+</ul>
+
+
+<p>A major problem with priority scheduling algorithms is <strong>indefinite blocking</strong>, or <strong>starvation</strong>.</p>
+
+<p>A solution to the problem of indefinite blockage of low-priority processes is <strong>aging</strong>.</p>
+
+<ul>
+<li>Round-Robin Scheduling</li>
+<li>Multilevel Queue Scheduling</li>
+<li>Multilevel Feedback Queue Scheduling</li>
+</ul>
+
+
+<h2>Multiple-Processor/Multicore Scheduling</h2>
+
+<ul>
+<li>Processor Affinity</li>
+</ul>
+
+
+<p>Because of the high cost of invalidating and repopulating caches, most SMP systems try to avoid migration of processes from one processor to another and instead attempt to keep a process running on the same processor. This is known as <strong>processor affinity</strong>.</p>
+
+<p>Some systems — such as Linux — also provide system calls that support hard affinity, thereby allowing a process to specify that it is not to migrate to other processors.</p>
+
+<p>The main-memory architecture of a system can affect processor affinity issues. Recall the knowledge non-uniform memory access (NUMA) mentioned in previous post, in which a CPU has faster access to some parts of main memory than to other parts.</p>
+
+<ul>
+<li>Load Balancing</li>
+</ul>
+
+
+<p>Load balancing attempts to keep the workload evenly distributed across all processors in an SMP system. It is important to note that load balancing is typically only necessary on systems where each processor has its own private queue of eligible processes to execute.</p>
+
+<p>There are two general approaches to load balancing: <strong>push migration</strong> and <strong>pull migration</strong>. Linux runs its load-balancing algorithm every 200 milliseconds (push migration) or whenever the run queue for a processor is empty (pull migration).</p>
+
+<ul>
+<li>Memory Stall</li>
+</ul>
+
+
+<p>Researchers have discovered that when a processor accesses memory, it spends a significant amount of time waiting for the data to become available. This situation, known as a <strong>memory stall</strong>, may occur for various reasons, such as a <strong>cache miss</strong> (accessing data that are not in cache memory).</p>
+
+<ul>
+<li>Virtualization</li>
+</ul>
+
+
+<p>The virtualization software presents one or more virtual CPUs to each of the virtual machines running on the system and then schedules the use of the physical CPUs among the virtual machines.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a></h1>
     
     
@@ -99,7 +213,7 @@
 
   <div class="entry-content"><h2>Process Control Block</h2>
 
-<p><code>Process Control Block</code> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
+<p><strong>Process Control Block</strong> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
 
 <p>Process state. The state may be new, ready, running, waiting, halted, and so on.</p>
 
@@ -117,11 +231,11 @@
 
 <h2>Context Switch</h2>
 
-<p>A <code>context switch</code> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
+<p>A <strong>context switch</strong> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
 
-<p>A <code>context</code> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
+<p>A <strong>context</strong> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
 
-<p>A <code>program counter</code> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
+<p>A <strong>program counter</strong> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
 
 <p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
 
@@ -136,11 +250,11 @@
 
 <p>Context switches can occur only in kernel mode.</p>
 
-<p><code>Multitasking</code> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
+<p><strong>Multitasking</strong> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
 
-<p><code>Interrupt handling</code> 1.) Hardware interrupt</p>
+<p><strong>Interrupt handling</strong> 1.) Hardware interrupt</p>
 
-<p><code>User and kernel mode switching</code> may cause context switch.</p>
+<p><strong>User and kernel mode switching</strong> may cause context switch.</p>
 
 <h2>Multithread programing</h2>
 
@@ -193,6 +307,28 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 
 
 <p>All threads of a process that have a scope of PTHREAD_SCOPE_PROCESS will be grouped together and this group of threads contents for the CPU. If there is a process with 4 PTHREAD_SCOPE_PROCESS threads and 4 PTHREAD_SCOPE_SYSTEM threds, then each of the PTHREAD_SCOPE_SYSTEM threads will get a fifth of the CPU and the other 4 PTHREAD_SCOPE_PROCESS threads will share the remaing fifth of the CPU. How the PTHREAD_SCOPE_PROCESS threads share their fifth of the CPU among themselves is determined by the scheduling policy and the thread&rsquo;s priority.</p>
+
+<h2>Process Creation</h2>
+
+<p>When a process creates a new process, two possibilities exist in terms of execution:</p>
+
+<ol>
+<li>The parent continues to execute concurrently with its children.</li>
+<li>The parent waits until some or all of its children have terminated.</li>
+</ol>
+
+
+<p>There are also two possibilities in terms of the address space of the new process:</p>
+
+<ol>
+<li>The child process is a duplicate of the parent process (it has the same program and data as the parent).</li>
+<li>The child process has a new program loaded into it.</li>
+</ol>
+
+
+<p>For example, if <code>clone()</code> is passed the flags <code>CLONE FS</code>, <code>CLONE VM</code>, <code>CLONE SIGHAND</code>, and <code>CLONE FILES</code>, the parent and child tasks will share the same file-system information (such as the current working directory), the same memory space, the same signal handlers, and the same set of open files.</p>
+
+<p>However, if none of these flags is set when <code>clone()</code> is invoked, no sharing takes place, resulting in functionality similar to that provided by the <code>fork()</code> system call.</p>
 </div>
   
   
@@ -233,20 +369,34 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 
   <div class="entry-content"><p>There is audit trial requirement that need to be captured into log table these day. But we suffer from the limited function provided by Sybase ASE DB in order to achieve our goals. SybaseASE 12.5 does not support neither analytic function nor row number column, and therefore we have to implement cross comparison by ourselves via basic semantics.</p>
 
-<pre><code>--create rownum column
-select rownum = identity(10), * from #temp_table from table where 1=2
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--create rownum column</span>
+</span><span class='line'><span class="k">select</span> <span class="n">rownum</span> <span class="o">=</span> <span class="k">identity</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="o">*</span> <span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span>
+</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">table_history</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span> <span class="k">order</span> <span class="k">by</span> <span class="n">audit_update_date</span> <span class="k">desc</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">--use self-join to match the cross rows</span>
+</span><span class='line'><span class="k">select</span> <span class="n">a</span><span class="p">.</span><span class="n">rownum</span><span class="p">,</span>
+</span><span class='line'>      <span class="k">case</span> <span class="k">when</span> <span class="n">a</span><span class="p">.</span><span class="n">col1</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">col1</span> <span class="k">then</span> <span class="s1">&#39;equal&#39;</span> <span class="k">else</span> <span class="s1">&#39;inequal&#39;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">a</span> <span class="k">left</span> <span class="k">out</span> <span class="k">join</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">b</span> <span class="k">on</span> <span class="p">(</span> <span class="n">a</span><span class="p">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">pid</span> <span class="k">and</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rownum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">rownum</span> <span class="p">)</span>
+</span><span class='line'><span class="k">where</span> <span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
 
-insert into #temp_table
-select * from table where pid = @pid
-insert into #temp_table
-select * from table_history where pid = @pid order by audit_update_date desc
-
---use self-join to match the cross rows
-select a.rownum,
-        case when a.col1 = b.col1 then 'equal' else 'inequal' end
-from #temp_table a left out join #temp_table b on ( a.pid = b.pid and (a.rownum + 1) = b.rownum )
-where ...
-</code></pre>
 
 <p>In contrast, we also provide oracle version of implementation.</p>
 </div>
@@ -291,46 +441,87 @@ where ...
 
 <h2>Convert columns to rows</h2>
 
-<pre><code>--common solution
-select * from (
-    select id, 'col_1' as col_name, col_1 as col_val
-    from table
-    union all
-    select id, 'col_2' as col_name, col_2 as col_val
-    from table
-    union all
-    ... 
-) order by id
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--common solution</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">(</span>
+</span><span class='line'>  <span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;col_1&#39;</span> <span class="k">as</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_1</span> <span class="k">as</span> <span class="n">col_val</span>
+</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
+</span><span class='line'>  <span class="k">union</span> <span class="k">all</span>
+</span><span class='line'>  <span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;col_2&#39;</span> <span class="k">as</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_2</span> <span class="k">as</span> <span class="n">col_val</span>
+</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
+</span><span class='line'>  <span class="k">union</span> <span class="k">all</span>
+</span><span class='line'>  <span class="p">...</span>
+</span><span class='line'><span class="p">)</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure>
 
---oracle 11g unpivot query
-select *
-from table
-unpivot (
-    col_val for col_name in (col_1 as 'col_1', col_2 as 'col_2')
-)
-order by id
-</code></pre>
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--oracle 11g unpivot query</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span>
+</span><span class='line'><span class="k">from</span> <span class="k">table</span>
+</span><span class='line'><span class="n">unpivot</span> <span class="p">(</span>
+</span><span class='line'>  <span class="n">col_val</span> <span class="k">for</span> <span class="n">col_name</span> <span class="k">in</span> <span class="p">(</span><span class="n">col_1</span> <span class="k">as</span> <span class="s1">&#39;col_1&#39;</span><span class="p">,</span> <span class="n">col_2</span> <span class="k">as</span> <span class="s1">&#39;col_2&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'><span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>Concert rows to columns</h2>
 
-<pre><code>--common solution
-select id,
-    max(case when col_name = 'col_1' then col_val else null end) as col_1,
-    max(case when col_name = 'col_2' then col_val else null end) as col_2,
-    ...
-from table
-order by id
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">--common solution</span>
+</span><span class='line'>  <span class="k">select</span> <span class="n">id</span><span class="p">,</span>
+</span><span class='line'>      <span class="k">max</span><span class="p">(</span><span class="k">case</span> <span class="k">when</span> <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;col_1&#39;</span> <span class="k">then</span> <span class="n">col_val</span> <span class="k">else</span> <span class="k">null</span> <span class="k">end</span><span class="p">)</span> <span class="k">as</span> <span class="n">col_1</span><span class="p">,</span>
+</span><span class='line'>      <span class="k">max</span><span class="p">(</span><span class="k">case</span> <span class="k">when</span> <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;col_2&#39;</span> <span class="k">then</span> <span class="n">col_val</span> <span class="k">else</span> <span class="k">null</span> <span class="k">end</span><span class="p">)</span> <span class="k">as</span> <span class="n">col_2</span><span class="p">,</span>
+</span><span class='line'>      <span class="p">...</span>
+</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
+</span><span class='line'>  <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
---oracle 11g pivot query
-select *
-from table
-pivot (
-    max(col_val) for col_name in ('col_1' as col_1,'col_2' as col_2)
-)
-where ...
-order by id
-</code></pre>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">--oracle 11g pivot query</span>
+</span><span class='line'>  <span class="k">select</span> <span class="o">*</span>
+</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
+</span><span class='line'>  <span class="n">pivot</span> <span class="p">(</span>
+</span><span class='line'>      <span class="k">max</span><span class="p">(</span><span class="n">col_val</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;col_1&#39;</span> <span class="k">as</span> <span class="n">col_1</span><span class="p">,</span><span class="s1">&#39;col_2&#39;</span> <span class="k">as</span> <span class="n">col_2</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'>  <span class="k">where</span> <span class="p">...</span>
+</span><span class='line'>  <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>Excel pivot table</h2>
 
@@ -430,17 +621,17 @@ If you want see the detail, please see <a href="http://docs.oracle.com/javase/7/
 
 <h3>6.1.traditional computing</h3>
 
-<p><code>Batch systems</code> processed jobs in bulk, with predetermined input (from files or other sources of data).</p>
+<p><strong>Batch systems</strong> processed jobs in bulk, with predetermined input (from files or other sources of data).</p>
 
-<p><code>Time-sharing</code> systems used a timer and scheduling algorithms to rapidly cycle processes through the CPU, giving each user a share of the resources. Time-sharing systems are an extension of multiprogramming wherein CPU scheduling algorithms rapidly switch between jobs, thus providing the illusion that all jobs are running concurrently.</p>
+<p><strong>Time-sharing</strong> systems used a timer and scheduling algorithms to rapidly cycle processes through the CPU, giving each user a share of the resources. Time-sharing systems are an extension of multiprogramming wherein CPU scheduling algorithms rapidly switch between jobs, thus providing the illusion that all jobs are running concurrently.</p>
 
 <h3>6.2client–Server computing (compute or file server system)</h3>
 
-<p>A <code>socket</code> is identified by an IP address concatenated with a port number. Servers implementing specific services (such as telnet, FTP, and HTTP) listen to well-known ports (a telnet server listens to port 23; an FTP server listens to port 21; and a Web, or HTTP, server listens to port 80).</p>
+<p>A <strong>socket</strong> is identified by an IP address concatenated with a port number. Servers implementing specific services (such as telnet, FTP, and HTTP) listen to well-known ports (a telnet server listens to port 23; an FTP server listens to port 21; and a Web, or HTTP, server listens to port 80).</p>
 
-<p>The <code>remote procedure calls (RPCs)</code> was designed as a way to abstract the procedure-call mechanism for use between systems with network connections.</p>
+<p>The <strong>remote procedure calls (RPCs)</strong> was designed as a way to abstract the procedure-call mechanism for use between systems with network connections.</p>
 
-<p><code>Remote method invocation (RMI)</code> is a Java feature similar to RPCs.</p>
+<p><strong>Remote method invocation (RMI)</strong> is a Java feature similar to RPCs.</p>
 
 <h3>6.3.peer-to-peer computing</h3>
 
@@ -464,15 +655,15 @@ Strace is used for debugging and troubleshooting the execution of an executable 
 
 <h3>8.1.message-passing model</h3>
 
-<p><code>Message passing</code> is useful for exchanging smaller amounts of data, because no conflicts need be avoided.</p>
+<p><strong>Message passing</strong> is useful for exchanging smaller amounts of data, because no conflicts need be avoided.</p>
 
-<p>Message passing may be either blocking or nonblocking— also known as synchronous and asynchronous. 1.)<code>Blocking send</code> 2.)<code>Nonblocking send</code> 3.)<code>Blockingreceive</code> 4.)<code>Nonblocking receive</code></p>
+<p>Message passing may be either blocking or nonblocking— also known as synchronous and asynchronous. 1.)<strong>Blocking send</strong> 2.)<strong>Nonblocking send</strong> 3.)<strong>Blockingreceive</strong> 4.)<strong>Nonblocking receive</strong></p>
 
-<p>Whether communication is direct or indirect, messages exchanged by commu- nicating processes reside in a temporary queue. 1.)<code>Zero capacity</code> 2.)<code>Boundedcapacity</code> 3.)<code>Unboundedcapacity</code></p>
+<p>Whether communication is direct or indirect, messages exchanged by commu- nicating processes reside in a temporary queue. 1.)<strong>Zero capacity</strong> 2.)<strong>Boundedcapacity</strong> 3.)<strong>Unboundedcapacity</strong></p>
 
 <h3>8.2.shared-memory model</h3>
 
-<p>In the <code>shared-memory</code> model, processes use shared memory create and shared memory attach system calls to create and gain access to regions of memory owned by other processes.</p>
+<p>In the <strong>shared-memory</strong> model, processes use shared memory create and shared memory attach system calls to create and gain access to regions of memory owned by other processes.</p>
 </div>
   
   
@@ -587,6 +778,14 @@ See my <a href="/about/">About</a> page for details.</p>
 
 <h2>Emphasis</h2>
 
+<p><em>single asterisks</em></p>
+
+<p><em>single underscores</em></p>
+
+<p><strong>double asterisks</strong></p>
+
+<p><strong>double underscores</strong></p>
+
 <p>un<em>frigging</em>believable</p>
 
 <p>*this text is surrounded by literal asterisks*</p>
@@ -607,8 +806,8 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 
 <h3>Automatic link</h3>
 
-<p><a href="http://example.com/">http://example.com/</a>
-<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#97;&#100;&#100;&#x72;&#101;&#x73;&#x73;&#x40;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#x2e;&#99;&#111;&#x6d;">&#97;&#x64;&#x64;&#114;&#101;&#115;&#x73;&#64;&#101;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#111;&#109;</a></p>
+<p><a href="http://daringfireball.net/projects/markdown/syntax#em">http://daringfireball.net/projects/markdown/syntax#em</a>
+<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#x64;&#100;&#x72;&#x65;&#115;&#x73;&#64;&#x65;&#x78;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#x6d;">&#x61;&#100;&#x64;&#114;&#x65;&#115;&#x73;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#109;</a></p>
 
 <h3>Blackslash escapes</h3>
 
@@ -643,8 +842,21 @@ _   underscore
 <aside class="sidebar">
   
     <section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/books/'>books (3)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/02/operating-system-concepts-cpu/">Operating System Concepts - CPU</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a>
@@ -660,10 +872,6 @@ _   underscore
     
       <li class="post">
         <a href="/blog/2014/03/05/operating-system-concepts-terminology/">Operating System Concepts - Terminology</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/01/first-post/">First Post</a>
       </li>
     
   </ul>

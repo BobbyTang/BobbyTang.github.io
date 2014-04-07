@@ -96,20 +96,34 @@
 
 <div class="entry-content"><p>There is audit trial requirement that need to be captured into log table these day. But we suffer from the limited function provided by Sybase ASE DB in order to achieve our goals. SybaseASE 12.5 does not support neither analytic function nor row number column, and therefore we have to implement cross comparison by ourselves via basic semantics.</p>
 
-<pre><code>--create rownum column
-select rownum = identity(10), * from #temp_table from table where 1=2
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--create rownum column</span>
+</span><span class='line'><span class="k">select</span> <span class="n">rownum</span> <span class="o">=</span> <span class="k">identity</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="o">*</span> <span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span>
+</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">table_history</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span> <span class="k">order</span> <span class="k">by</span> <span class="n">audit_update_date</span> <span class="k">desc</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">--use self-join to match the cross rows</span>
+</span><span class='line'><span class="k">select</span> <span class="n">a</span><span class="p">.</span><span class="n">rownum</span><span class="p">,</span>
+</span><span class='line'>      <span class="k">case</span> <span class="k">when</span> <span class="n">a</span><span class="p">.</span><span class="n">col1</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">col1</span> <span class="k">then</span> <span class="s1">&#39;equal&#39;</span> <span class="k">else</span> <span class="s1">&#39;inequal&#39;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">a</span> <span class="k">left</span> <span class="k">out</span> <span class="k">join</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">b</span> <span class="k">on</span> <span class="p">(</span> <span class="n">a</span><span class="p">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">pid</span> <span class="k">and</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rownum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">rownum</span> <span class="p">)</span>
+</span><span class='line'><span class="k">where</span> <span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
 
-insert into #temp_table
-select * from table where pid = @pid
-insert into #temp_table
-select * from table_history where pid = @pid order by audit_update_date desc
-
---use self-join to match the cross rows
-select a.rownum,
-        case when a.col1 = b.col1 then 'equal' else 'inequal' end
-from #temp_table a left out join #temp_table b on ( a.pid = b.pid and (a.rownum + 1) = b.rownum )
-where ...
-</code></pre>
 
 <p>In contrast, we also provide oracle version of implementation.</p>
 </div>
@@ -136,6 +150,12 @@ where ...
 
 <time datetime="2014-03-10T01:32:05+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/sql/'>sql</a>
+  
+</span>
 
 
     </p>
@@ -169,8 +189,21 @@ where ...
 <aside class="sidebar">
   
     <section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/books/'>books (3)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/02/operating-system-concepts-cpu/">Operating System Concepts - CPU</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a>
@@ -186,10 +219,6 @@ where ...
     
       <li class="post">
         <a href="/blog/2014/03/05/operating-system-concepts-terminology/">Operating System Concepts - Terminology</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/01/first-post/">First Post</a>
       </li>
     
   </ul>

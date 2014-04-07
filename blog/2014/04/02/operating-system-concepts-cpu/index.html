@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First Post - BobbyTang Blog</title>
+  <title>Operating System Concepts - CPU - BobbyTang Blog</title>
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="MarkDown Template Blockquotes Header inside blockquote This is the first list item. This is the second list item. This is nested blockquote. Here& &hellip;">
+  <meta name="description" content="CPU Scheduling CPU scheduling is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://BobbyTang.github.io/blog/2014/01/01/first-post">
+  <link rel="canonical" href="http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="BobbyTang Blog" type="application/atom+xml">
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">First Post</h1>
+      <h1 class="entry-title">Operating System Concepts - CPU</h1>
     
     
       <p class="meta">
@@ -84,7 +84,7 @@
   
 
 
-<time datetime="2014-01-01T11:32:03+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+<time datetime="2014-04-02T06:30:57+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://BobbyTang.github.io">Comments</a>
@@ -94,130 +94,82 @@
   </header>
 
 
-<div class="entry-content"><h1>MarkDown Template</h1>
+<div class="entry-content"><h2>CPU Scheduling</h2>
 
-<h2>Blockquotes</h2>
+<p><strong>CPU scheduling</strong> is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to the selected process by the dispatcher.</p>
 
-<blockquote><h2>Header inside blockquote</h2>
-
-<ol>
-<li> This is the first list item.</li>
-<li> This is the second list item.</li>
-</ol>
-
-
-<blockquote><p> This is nested blockquote.</p></blockquote>
-
-<p>Here&rsquo;s some example code:</p>
-
-<pre><code>return shell_exec("echo $input | $markdown_script");
-</code></pre></blockquote>
-
-<h2>List</h2>
-
-<p>Markdown supports ordered (numbered) and unordered (bulleted) lists.
-Unordered lists use asterisks, pluses, and hyphens — interchangably — as list markers:</p>
+<h2>Scheduling Criteria</h2>
 
 <ul>
-<li>Red</li>
-<li>Green</li>
-<li><p>Blue</p></li>
-<li><p>Bird</p></li>
-<li>McHale</li>
-<li>Parish</li>
+<li>CPU utilization</li>
+<li>Throughput</li>
+<li>Turnaround time</li>
 </ul>
 
 
-<p>To put a code block within a list item, the code block needs to be indented twice — 8 spaces or two tabs:</p>
+<p>The interval from the time of submission of a process to the time of completion is the turnaround time. <strong>Turnaround time</strong> is the sum of the periods spent waiting to get into memory, waiting in the ready queue, executing on the CPU, and doing I/O.</p>
 
 <ul>
-<li>A list item with a code block:
-      <codes goes here with two leading tabs></li>
+<li>Waiting time</li>
+<li>Response time</li>
 </ul>
 
 
-<h2>Code Blocks</h2>
+<h2>Scheduling Alogrithm</h2>
 
-<p>To produce a code block in Markdown, simply indent every line of the block by at least 4 spaces or 1 tab. For example, given this input:</p>
+<ul>
+<li>First-Come, First-Served Scheduling</li>
+<li>Shortest-Job-First Scheduling</li>
+<li>Priority Scheduling</li>
+</ul>
 
-<h2>Horizontal Rules</h2>
 
-<hr />
+<p>A major problem with priority scheduling algorithms is <strong>indefinite blocking</strong>, or <strong>starvation</strong>.</p>
 
-<hr />
+<p>A solution to the problem of indefinite blockage of low-priority processes is <strong>aging</strong>.</p>
 
-<hr />
+<ul>
+<li>Round-Robin Scheduling</li>
+<li>Multilevel Queue Scheduling</li>
+<li>Multilevel Feedback Queue Scheduling</li>
+</ul>
 
-<hr />
 
-<hr />
+<h2>Multiple-Processor/Multicore Scheduling</h2>
 
-<h2>Links</h2>
+<ul>
+<li>Processor Affinity</li>
+</ul>
 
-<h3>inline links</h3>
 
-<p>This is <a href="http://example.com/" title="Title">an example</a> inline link.
-See my <a href="/about/">About</a> page for details.</p>
+<p>Because of the high cost of invalidating and repopulating caches, most SMP systems try to avoid migration of processes from one processor to another and instead attempt to keep a process running on the same processor. This is known as <strong>processor affinity</strong>.</p>
 
-<h3>reference links</h3>
+<p>Some systems — such as Linux — also provide system calls that support hard affinity, thereby allowing a process to specify that it is not to migrate to other processors.</p>
 
-<p>This is <a href="../images/email.png" title="Optional title attribute">an example</a> reference-style link.</p>
+<p>The main-memory architecture of a system can affect processor affinity issues. Recall the knowledge non-uniform memory access (NUMA) mentioned in previous post, in which a CPU has faster access to some parts of main memory than to other parts.</p>
 
-<h3>implicit link</h3>
+<ul>
+<li>Load Balancing</li>
+</ul>
 
-<p>I get 10 times more traffic from <a href="http://google.com/" title="Google">Google</a> than from
-<a href="http://search.yahoo.com/" title="Yahoo Search">Yahoo</a> or <a href="http://search.msn.com/" title="MSN Search">MSN</a>.</p>
 
-<h2>Emphasis</h2>
+<p>Load balancing attempts to keep the workload evenly distributed across all processors in an SMP system. It is important to note that load balancing is typically only necessary on systems where each processor has its own private queue of eligible processes to execute.</p>
 
-<p><em>single asterisks</em></p>
+<p>There are two general approaches to load balancing: <strong>push migration</strong> and <strong>pull migration</strong>. Linux runs its load-balancing algorithm every 200 milliseconds (push migration) or whenever the run queue for a processor is empty (pull migration).</p>
 
-<p><em>single underscores</em></p>
+<ul>
+<li>Memory Stall</li>
+</ul>
 
-<p><strong>double asterisks</strong></p>
 
-<p><strong>double underscores</strong></p>
+<p>Researchers have discovered that when a processor accesses memory, it spends a significant amount of time waiting for the data to become available. This situation, known as a <strong>memory stall</strong>, may occur for various reasons, such as a <strong>cache miss</strong> (accessing data that are not in cache memory).</p>
 
-<p>un<em>frigging</em>believable</p>
+<ul>
+<li>Virtualization</li>
+</ul>
 
-<p>*this text is surrounded by literal asterisks*</p>
 
-<h2>Code</h2>
-
-<p>Use the <code>printf()</code> function.
-<code>There is a literal backtick (`) here.</code>
-Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
-
-<h2>Images</h2>
-
-<p><img src="/path/to/img.jpg" title="Optional title" alt="Alt text" /></p>
-
-<p><img src="../images/email.png" title="Optional title attribute" alt="Alt text" /></p>
-
-<h2>Miscellaneous</h2>
-
-<h3>Automatic link</h3>
-
-<p><a href="http://daringfireball.net/projects/markdown/syntax#em">http://daringfireball.net/projects/markdown/syntax#em</a>
-<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#x64;&#100;&#x72;&#x65;&#115;&#x73;&#64;&#x65;&#x78;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#x6d;">&#x61;&#100;&#x64;&#114;&#x65;&#115;&#x73;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#109;</a></p>
-
-<h3>Blackslash escapes</h3>
-
-<pre><code>\   backslash
-`   backtick
-*   asterisk
-_   underscore
-{}  curly braces
-[]  square brackets
-()  parentheses
-#   hash mark
-+   plus sign
--   minus sign (hyphen)
-.   dot
-!   exclamation mark
-</code></pre>
-
-<h6>This is an H6</h6>
+<p>The virtualization software presents one or more virtual CPUs to each of the virtual machines running on the system and then schedules the use of the physical CPUs among the virtual machines.</p>
 </div>
 
 
@@ -240,12 +192,12 @@ _   underscore
   
 
 
-<time datetime="2014-01-01T11:32:03+08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+<time datetime="2014-04-02T06:30:57+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/test/'>test</a>
+    <a class='category' href='/blog/categories/books/'>books</a>
   
 </span>
 
@@ -261,8 +213,8 @@ _   underscore
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/" title="Previous Post: Operating system concepts - Process/Thread">&laquo; Operating system concepts - Process/Thread</a>
       
-        <a class="basic-alignment right" href="/blog/2014/03/05/operating-system-concepts-terminology/" title="Next Post: Operating system concepts - Terminology">Operating system concepts - Terminology &raquo;</a>
       
     </p>
   </footer>
@@ -337,8 +289,8 @@ _   underscore
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://BobbyTang.github.io/blog/2014/01/01/first-post/';
-        var disqus_url = 'http://BobbyTang.github.io/blog/2014/01/01/first-post/';
+        var disqus_identifier = 'http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/';
+        var disqus_url = 'http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/';
         var disqus_script = 'embed.js';
       
     (function () {

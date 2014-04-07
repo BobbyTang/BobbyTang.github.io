@@ -96,7 +96,7 @@
 
 <div class="entry-content"><h2>Process Control Block</h2>
 
-<p><code>Process Control Block</code> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
+<p><strong>Process Control Block</strong> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
 
 <p>Process state. The state may be new, ready, running, waiting, halted, and so on.</p>
 
@@ -114,11 +114,11 @@
 
 <h2>Context Switch</h2>
 
-<p>A <code>context switch</code> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
+<p>A <strong>context switch</strong> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
 
-<p>A <code>context</code> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
+<p>A <strong>context</strong> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
 
-<p>A <code>program counter</code> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
+<p>A <strong>program counter</strong> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
 
 <p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
 
@@ -133,11 +133,11 @@
 
 <p>Context switches can occur only in kernel mode.</p>
 
-<p><code>Multitasking</code> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
+<p><strong>Multitasking</strong> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
 
-<p><code>Interrupt handling</code> 1.) Hardware interrupt</p>
+<p><strong>Interrupt handling</strong> 1.) Hardware interrupt</p>
 
-<p><code>User and kernel mode switching</code> may cause context switch.</p>
+<p><strong>User and kernel mode switching</strong> may cause context switch.</p>
 
 <h2>Multithread programing</h2>
 
@@ -190,6 +190,28 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 
 
 <p>All threads of a process that have a scope of PTHREAD_SCOPE_PROCESS will be grouped together and this group of threads contents for the CPU. If there is a process with 4 PTHREAD_SCOPE_PROCESS threads and 4 PTHREAD_SCOPE_SYSTEM threds, then each of the PTHREAD_SCOPE_SYSTEM threads will get a fifth of the CPU and the other 4 PTHREAD_SCOPE_PROCESS threads will share the remaing fifth of the CPU. How the PTHREAD_SCOPE_PROCESS threads share their fifth of the CPU among themselves is determined by the scheduling policy and the thread&rsquo;s priority.</p>
+
+<h2>Process Creation</h2>
+
+<p>When a process creates a new process, two possibilities exist in terms of execution:</p>
+
+<ol>
+<li>The parent continues to execute concurrently with its children.</li>
+<li>The parent waits until some or all of its children have terminated.</li>
+</ol>
+
+
+<p>There are also two possibilities in terms of the address space of the new process:</p>
+
+<ol>
+<li>The child process is a duplicate of the parent process (it has the same program and data as the parent).</li>
+<li>The child process has a new program loaded into it.</li>
+</ol>
+
+
+<p>For example, if <code>clone()</code> is passed the flags <code>CLONE FS</code>, <code>CLONE VM</code>, <code>CLONE SIGHAND</code>, and <code>CLONE FILES</code>, the parent and child tasks will share the same file-system information (such as the current working directory), the same memory space, the same signal handlers, and the same set of open files.</p>
+
+<p>However, if none of these flags is set when <code>clone()</code> is invoked, no sharing takes place, resulting in functionality similar to that provided by the <code>fork()</code> system call.</p>
 </div>
 
 
@@ -215,6 +237,12 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 <time datetime="2014-03-25T05:57:31+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
       
 
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/books/'>books</a>
+  
+</span>
+
 
     </p>
     
@@ -229,6 +257,8 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
       
         <a class="basic-alignment left" href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/" title="Previous Post: SQL - SybaseASE - Alternative way to support LEAD/LAG function">&laquo; SQL - SybaseASE - Alternative way to support LEAD/LAG function</a>
       
+      
+        <a class="basic-alignment right" href="/blog/2014/04/02/operating-system-concepts-cpu/" title="Next Post: Operating system concepts - CPU">Operating system concepts - CPU &raquo;</a>
       
     </p>
   </footer>
@@ -245,8 +275,21 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 <aside class="sidebar">
   
     <section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/books/'>books (3)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/02/operating-system-concepts-cpu/">Operating System Concepts - CPU</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a>
@@ -262,10 +305,6 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
     
       <li class="post">
         <a href="/blog/2014/03/05/operating-system-concepts-terminology/">Operating System Concepts - Terminology</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/01/first-post/">First Post</a>
       </li>
     
   </ul>

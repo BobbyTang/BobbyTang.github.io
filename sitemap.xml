@@ -2,31 +2,35 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://BobbyTang.github.io/blog/2014/01/01/first-post/</loc>
-        <lastmod>2014-03-16T14:02:14+08:00</lastmod>
+        <lastmod>2014-04-07T23:54:01+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://BobbyTang.github.io/blog/2014/03/05/operating-system-concepts-terminology/
         </loc>
-        <lastmod>2014-04-01T05:13:45+08:00</lastmod>
+        <lastmod>2014-04-08T00:01:15+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/
         </loc>
-        <lastmod>2014-03-11T06:20:39+08:00</lastmod>
+        <lastmod>2014-04-07T23:43:06+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://BobbyTang.github.io/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/
         </loc>
-        <lastmod>2014-03-17T00:08:24+08:00</lastmod>
+        <lastmod>2014-04-07T23:43:10+08:00</lastmod>
     </url>
     <url>
         <loc>
             http://BobbyTang.github.io/blog/2014/03/25/operating-system-concepts-process-slash-thread/
         </loc>
-        <lastmod>2014-04-01T05:59:29+08:00</lastmod>
+        <lastmod>2014-04-08T00:00:39+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/</loc>
+        <lastmod>2014-04-07T23:59:10+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/about/</loc>
@@ -34,11 +38,11 @@
     </url>
     <url>
         <loc>http://BobbyTang.github.io/blog/archives/</loc>
-        <lastmod>2014-04-01T05:59:29+08:00</lastmod>
+        <lastmod>2014-04-08T00:01:15+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/</loc>
-        <lastmod>2014-04-01T05:59:29+08:00</lastmod>
+        <lastmod>2014-04-08T00:01:15+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/robots.txt</loc>
