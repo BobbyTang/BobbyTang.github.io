@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Operating System Concepts - VirtualMemory - BobbyTang Blog</title>
+  <meta name="author" content="BobbyTang">
+
+  
+  <meta name="description" content="Demand Paging Loading the entire program into memory results in loading the executable code for all options, regardless of whether an option is &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://BobbyTang.github.io/blog/2014/04/23/operating-system-concepts-virtualmemory">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="BobbyTang Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">BobbyTang Blog</a></h1>
+  
+    <h2>Share more, Gain more.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:BobbyTang.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Operating System Concepts - VirtualMemory</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-23T05:43:26+08:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Demand Paging</h2>
+
+<p>Loading the entire program into memory results in loading the executable code for all options, regardless of whether an option is ultimately selected by the user or not. An alternative strategy is to load pages only as they are needed. This technique is known as <strong>demand paging</strong> and is commonly used in virtual memory systems.</p>
+
+<h2>Page Fault</h2>
+
+<p>A page fault causes the following sequence to occur:</p>
+
+<p><img src="https://farm6.staticflickr.com/5325/13952117776_754a2b4bda.jpg" title="Steps_in_handling_a_page_fault.png" ></p>
+
+<ol>
+<li>Trap to the operating system.</li>
+<li>Save the user registers and process state.</li>
+<li>Determine that the interrupt was a page fault.</li>
+<li>Check that the page reference was legal and determine the location of the page on the disk.</li>
+<li>Issue a read from the disk to a free frame:
+
+<ol type="a">
+<li>Wait in a queue for this device until the read request is serviced.</li>
+<li>Wait for the device seek and/or latency time.</li>
+<li>Begin the transfer of the page to a free frame.</li>
+</ol>
+</li>
+<li>While waiting, allocate the CPU to some other user (CPU scheduling, optional).</li>
+<li>Receive an interrupt from the disk I/O subsystem (I/O completed).</li>
+<li>Save the registers and process state for the other user (if step 6 is executed).</li>
+<li>Determine that the interrupt was from the disk.</li>
+<li>Correct the page table and other tables to show that the desired page is now in memory.</li>
+<li>Wait for the CPU to be allocated to this process again.</li>
+<li>Restore the user registers, process state, and new page table, and then  resume the interrupted instruction.</li>
+</ol>
+
+
+<h2>Copy-on-Write</h2>
+
+<p>Considering that many child processes invoke the exec() system call immediately after creation, the copying of the parent’s address space may be unnecessary.</p>
+
+<p>Instead, we can use a technique known as <strong>copy-on-write</strong>, which works by allowing the parent and child processes initially to share the same pages. These shared pages are marked as copy-on-write pages, meaning that if either process writes to a shared page, a copy of the shared page is created.</p>
+
+<h2>Page Replacement</h2>
+
+<ol>
+<li>Find the location of the desired page on the disk.</li>
+<li>Find a free frame:
+
+<ol type="a">
+<li>If there is a free frame, use it.</li>
+<li>If there is no free frame, use a page-replacement algorithm to select a victim frame.</li>
+<li>Write the victim frame to the disk; change the page and frame tables accordingly.</li>
+</ol>
+</li>
+<li>Read the desired page into the newly freed frame; change the page and frame tables.</li>
+<li>Restart the user process.</li>
+</ol>
+
+
+<p><strong>Page Replacement Algorithm</strong></p>
+
+<ul>
+<li>FIFO Page Replacement</li>
+<li>Optimal Page Replacement</li>
+<li>LRU Page Replacement</li>
+<li>LRU-Approximation Page Replacement</li>
+<li>Additional-Reference-Bits Algorithm</li>
+<li>Second-Chance Algorithm
+
+<ol type="a">
+<li> Enhanced Second-Chance Algorithm</li>
+</ol>
+</li>
+<li>Counting-Based Page Replacement
+
+<ol type="a">
+<li> least-frequently-used (LFU) page-replacement algorithm</li>
+<li> most-frequently-used (MFU) page-replacement algorithm</li>
+</ol>
+</li>
+</ul>
+
+
+<h2>Raw I/O</h2>
+
+<p>Some operating systems give special programs the ability to use a disk partition as a large sequential array of logical blocks, without any file-system data structures. This array is sometimes called the raw disk, and I/O to this array is termed <strong>raw I/O</strong>.</p>
+
+<p><strong>Raw I/O</strong> bypasses all the file- system services, such as file I/O demand paging, file locking, prefetching, space allocation, file names, and directories.</p>
+
+<h2>Thrashing</h2>
+
+<p>In fact, look at any process that does not have “enough” frames. If the process does not have the number of frames it needs to support pages in active use, it will quickly page-fault. At this point, it must replace some page. However, since all its pages are in active use, it must replace a page that will be needed again right away. Consequently, it quickly faults again, and again, and again, replacing pages that it must bring back in immediately.</p>
+
+<p>This high paging activity is called <strong>thrashing</strong>. A process is thrashing if it is spending more time paging than executing.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">BobbyTang</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-23T05:43:26+08:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/books/'>books</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/09/operating-system-concepts-mainmemory/" title="Previous Post: Operating system concepts - MainMemory">&laquo; Operating system concepts - MainMemory</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/books/'>books (5)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/23/operating-system-concepts-virtualmemory/">Operating System Concepts - VirtualMemory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/09/operating-system-concepts-mainmemory/">Operating System Concepts - MainMemory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/02/operating-system-concepts-cpu/">Operating System Concepts - CPU</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">SQL - SybaseASE - Alternative Way to Support LEAD/LAG Function</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - BobbyTang -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bobbytang';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://BobbyTang.github.io/blog/2014/04/23/operating-system-concepts-virtualmemory/';
+        var disqus_url = 'http://BobbyTang.github.io/blog/2014/04/23/operating-system-concepts-virtualmemory/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

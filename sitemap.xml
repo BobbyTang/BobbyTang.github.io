@@ -33,16 +33,28 @@
         <lastmod>2014-04-07T23:59:10+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://BobbyTang.github.io/blog/2014/04/09/operating-system-concepts-mainmemory/
+        </loc>
+        <lastmod>2014-04-23T05:40:06+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://BobbyTang.github.io/blog/2014/04/23/operating-system-concepts-virtualmemory/
+        </loc>
+        <lastmod>2014-04-23T06:14:27+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://BobbyTang.github.io/about/</loc>
         <lastmod>2014-01-01T11:31:26+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/blog/archives/</loc>
-        <lastmod>2014-04-08T00:01:15+08:00</lastmod>
+        <lastmod>2014-04-23T06:14:27+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/</loc>
-        <lastmod>2014-04-08T00:01:15+08:00</lastmod>
+        <lastmod>2014-04-23T06:14:27+08:00</lastmod>
     </url>
     <url>
         <loc>http://BobbyTang.github.io/robots.txt</loc>

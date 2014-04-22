@@ -4,7 +4,7 @@
   <title><![CDATA[BobbyTang Blog]]></title>
   <link href="http://BobbyTang.github.io/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
-  <updated>2014-04-08T00:01:16+08:00</updated>
+  <updated>2014-04-23T06:15:25+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
   <author>
     <name><![CDATA[BobbyTang]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Operating System Concepts - VirtualMemory]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/04/23/operating-system-concepts-virtualmemory/"/>
+    <updated>2014-04-23T05:43:26+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/04/23/operating-system-concepts-virtualmemory</id>
+    <content type="html"><![CDATA[<h2>Demand Paging</h2>
+
+<p>Loading the entire program into memory results in loading the executable code for all options, regardless of whether an option is ultimately selected by the user or not. An alternative strategy is to load pages only as they are needed. This technique is known as <strong>demand paging</strong> and is commonly used in virtual memory systems.</p>
+
+<h2>Page Fault</h2>
+
+<p>A page fault causes the following sequence to occur:</p>
+
+<p><img src="https://farm6.staticflickr.com/5325/13952117776_754a2b4bda.jpg" title="Steps_in_handling_a_page_fault.png" ></p>
+
+<ol>
+<li>Trap to the operating system.</li>
+<li>Save the user registers and process state.</li>
+<li>Determine that the interrupt was a page fault.</li>
+<li>Check that the page reference was legal and determine the location of the page on the disk.</li>
+<li>Issue a read from the disk to a free frame:
+
+<ol type="a">
+<li>Wait in a queue for this device until the read request is serviced.</li>
+<li>Wait for the device seek and/or latency time.</li>
+<li>Begin the transfer of the page to a free frame.</li>
+</ol>
+</li>
+<li>While waiting, allocate the CPU to some other user (CPU scheduling, optional).</li>
+<li>Receive an interrupt from the disk I/O subsystem (I/O completed).</li>
+<li>Save the registers and process state for the other user (if step 6 is executed).</li>
+<li>Determine that the interrupt was from the disk.</li>
+<li>Correct the page table and other tables to show that the desired page is now in memory.</li>
+<li>Wait for the CPU to be allocated to this process again.</li>
+<li>Restore the user registers, process state, and new page table, and then  resume the interrupted instruction.</li>
+</ol>
+
+
+<h2>Copy-on-Write</h2>
+
+<p>Considering that many child processes invoke the exec() system call immediately after creation, the copying of the parent’s address space may be unnecessary.</p>
+
+<p>Instead, we can use a technique known as <strong>copy-on-write</strong>, which works by allowing the parent and child processes initially to share the same pages. These shared pages are marked as copy-on-write pages, meaning that if either process writes to a shared page, a copy of the shared page is created.</p>
+
+<h2>Page Replacement</h2>
+
+<ol>
+<li>Find the location of the desired page on the disk.</li>
+<li>Find a free frame:
+
+<ol type="a">
+<li>If there is a free frame, use it.</li>
+<li>If there is no free frame, use a page-replacement algorithm to select a victim frame.</li>
+<li>Write the victim frame to the disk; change the page and frame tables accordingly.</li>
+</ol>
+</li>
+<li>Read the desired page into the newly freed frame; change the page and frame tables.</li>
+<li>Restart the user process.</li>
+</ol>
+
+
+<p><strong>Page Replacement Algorithm</strong></p>
+
+<ul>
+<li>FIFO Page Replacement</li>
+<li>Optimal Page Replacement</li>
+<li>LRU Page Replacement</li>
+<li>LRU-Approximation Page Replacement</li>
+<li>Additional-Reference-Bits Algorithm</li>
+<li>Second-Chance Algorithm
+
+<ol type="a">
+<li> Enhanced Second-Chance Algorithm</li>
+</ol>
+</li>
+<li>Counting-Based Page Replacement
+
+<ol type="a">
+<li> least-frequently-used (LFU) page-replacement algorithm</li>
+<li> most-frequently-used (MFU) page-replacement algorithm</li>
+</ol>
+</li>
+</ul>
+
+
+<h2>Raw I/O</h2>
+
+<p>Some operating systems give special programs the ability to use a disk partition as a large sequential array of logical blocks, without any file-system data structures. This array is sometimes called the raw disk, and I/O to this array is termed <strong>raw I/O</strong>.</p>
+
+<p><strong>Raw I/O</strong> bypasses all the file- system services, such as file I/O demand paging, file locking, prefetching, space allocation, file names, and directories.</p>
+
+<h2>Thrashing</h2>
+
+<p>In fact, look at any process that does not have “enough” frames. If the process does not have the number of frames it needs to support pages in active use, it will quickly page-fault. At this point, it must replace some page. However, since all its pages are in active use, it must replace a page that will be needed again right away. Consequently, it quickly faults again, and again, and again, replacing pages that it must bring back in immediately.</p>
+
+<p>This high paging activity is called <strong>thrashing</strong>. A process is thrashing if it is spending more time paging than executing.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Operating System Concepts - MainMemory]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/04/09/operating-system-concepts-mainmemory/"/>
+    <updated>2014-04-09T07:39:27+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/04/09/operating-system-concepts-mainmemory</id>
+    <content type="html"><![CDATA[<h2>Contiguous Memory Allocation</h2>
+
+<p>Problem:</p>
+
+<p>Both the first-fit and best-fit strategies for memory allocation suffer from <strong>external fragmentation</strong>.</p>
+
+<p>The general approach to avoiding this problem is to break the physical memory into fixed-sized blocks and allocate memory in units based on block size. With this approach, the memory allocated to a process may be slightly larger than the requested memory. The difference between these two numbers is <strong>internal fragmentation</strong> — unused memory that is internal to a partition.</p>
+
+<p>Solution:</p>
+
+<p>One solution to the problem of external fragmentation is <strong>compaction</strong>. The goal is to shuffle the memory contents so as to place all free memory together in one large block. Compaction is possible only if relocation is dynamic and is done at execution time.</p>
+
+<p>Another possible solution to the external-fragmentation problem is to permit the logical address space of the processes to be noncontiguous, thus allowing a process to be allocated physical memory wherever such memory is available.</p>
+
+<h2>Page and Segmentation</h2>
+
+<p><strong>Paging</strong> is a memory-management scheme that permits the physical address space of a process to be noncontiguous. Paging avoids external fragmentation and the need for compaction.</p>
+
+<p><img src="https://farm8.staticflickr.com/7454/13951470216_7af3187c5c.jpg" title="paging_with_TLB" ></p>
+
+<p>The <strong>translation look-aside buffer(TLB)</strong> is associative, high-speed memory. Each entry in the TLB consists of two parts: a key (or tag) and a value. When the associative memory is presented with an item, the item is compared with all keys simultaneously. If the item is found, the corresponding value field is returned.</p>
+
+<p>If the page number is not in the TLB (known as a <strong>TLB miss</strong>), a memory reference to the page table must be made. When the frame number is obtained, we can use it to access memory (Figure 8.11). In addition, we add the page number and frame number to the TLB, so that they will be found quickly on the next reference.</p>
+
+<p><strong>Segmentation</strong> is a memory-management scheme that supports this user view of memory.</p>
+
+<h2>Page Table</h2>
+
+<ul>
+<li>hierarchical paging</li>
+</ul>
+
+
+<p>Problem&amp;Solution:</p>
+
+<p>For example, consider a system with a 32-bit logical address space. If the page size in such a system is 4 KB (212), then a page table may consist of up to 1 million entries (232/212). Assuming that each entry consists of 4 bytes, each process may need up to 4 MB of physical address space for the page table alone. Clearly, we would not want to allocate the page table contiguously in main memory. One simple solution to this problem is to divide the page table into smaller pieces. We can accomplish this division in several ways.</p>
+
+<pre><code>$ getconf PAGESIZE
+4096
+</code></pre>
+
+<ul>
+<li>hashed page tables</li>
+</ul>
+
+
+<p>Problem&amp;Solution:</p>
+
+<p>A common approach for handling address spaces larger than 32 bits is to use a <strong>hashed page table</strong>, with the hash value being the virtual page number.</p>
+
+<ul>
+<li>inverted page tables</li>
+</ul>
+
+
+<p>Problem&amp;Solution:</p>
+
+<p>Usually, each process has an associated page table. One of the drawbacks of this method is that each page table may consist of millions of entries. These tables may consume large amounts of physical memory just to keep track of how other physical memory is being used.</p>
+
+<p>Drawbacks:</p>
+
+<p>Although this scheme decreases the amount of memory needed to store each page table, it increases the amount of time needed to search the table when a page reference occurs.</p>
+
+<p>Systems that use inverted page tables have difficulty implementing shared memory. Shared memory is usually implemented as multiple virtual addresses (one for each process sharing the memory) that are mapped to one physical address. This standard method cannot be used with inverted page tables; because there is only one virtual page entry for every physical page, one physical page cannot have two (or more) shared virtual addresses.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Operating System Concepts - CPU]]></title>
@@ -578,7 +749,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://daringfireball.net/projects/markdown/syntax#em">http://daringfireball.net/projects/markdown/syntax#em</a>
-<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#x64;&#100;&#x72;&#x65;&#115;&#x73;&#64;&#x65;&#x78;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#x6d;">&#x61;&#100;&#x64;&#114;&#x65;&#115;&#x73;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#46;&#x63;&#111;&#109;</a></p>
+<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#97;&#100;&#100;&#x72;&#101;&#x73;&#x73;&#64;&#x65;&#120;&#97;&#x6d;&#x70;&#x6c;&#101;&#x2e;&#99;&#x6f;&#109;">&#x61;&#x64;&#x64;&#114;&#x65;&#115;&#x73;&#x40;&#x65;&#x78;&#97;&#109;&#x70;&#108;&#101;&#46;&#99;&#111;&#x6d;</a></p>
 
 <h3>Blackslash escapes</h3>
 
