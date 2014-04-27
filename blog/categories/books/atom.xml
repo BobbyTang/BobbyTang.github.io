@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Books | BobbyTang Blog]]></title>
   <link href="http://BobbyTang.github.io/blog/categories/books/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
-  <updated>2014-04-23T06:15:25+08:00</updated>
+  <updated>2014-04-27T20:41:10+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
   <author>
     <name><![CDATA[BobbyTang]]></name>
@@ -12,6 +12,117 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Operating System Concepts - IO System]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/04/27/operating-system-concepts-io-system/"/>
+    <updated>2014-04-27T17:43:57+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/04/27/operating-system-concepts-io-system</id>
+    <content type="html"><![CDATA[<h2>I/O Hardware</h2>
+
+<p>The device communicates with the machine via a connection point, or <strong>port</strong> — for example, a serial port.</p>
+
+<p>If devices use a common set of wires, the connection is called a bus. A <strong>bus</strong> is a set of wires and a rigidly defined protocol that specifies a set of messages that can be sent on the wires.</p>
+
+<p>This figure shows a <strong>PCI bus</strong> (the common PC system bus) that connects the processor–memory subsystem to the fast devices and an expansion bus that connects relatively slow devices, such as the keyboard and serial and USB ports.</p>
+
+<p><img class="<a" src="href="https://farm8.staticflickr.com/7406/14029529882_f49ab52235_z.jpg">https://farm8.staticflickr.com/7406/14029529882_f49ab52235_z.jpg</a>" title="pcbus_structure.png" ></p>
+
+<p>A <strong>controller</strong> is a collection of electronics that can operate a port, a bus, or a device. A serial-port controller is a simple device controller. It is a single chip (or portion of a chip) in the computer that controls the signals on the wires of a serial port.</p>
+
+<p>By contrast, a <strong>SCSI bus controller</strong> is not simple. Because the SCSI protocol is complex, the SCSI bus controller is often implemented as a separate circuit board (or a host adapter) that plugs into the computer. It typically contains a processor, microcode, and some private memory to enable it to process the SCSI protocol messages.</p>
+
+<h2>Polling &amp; Interrupts</h2>
+
+<p>In many computer architectures, three CPU-instruction cycles are sufficient to poll a device: read a device register, logical–and to extract a status bit, and branch if not zero. But <strong>polling</strong> becomes inefficient when it is attempted repeatedly yet rarely finds a device to be ready for service, while other useful CPU processing remains undone.</p>
+
+<p>The hardware mechanism that enables a device to notify the CPU is called an <strong>interrupt</strong>.</p>
+
+<p>The basic interrupt mechanism works as follows. The CPU hardware has a wire called the <strong>interrupt-request line</strong> that the CPU senses after executing every instruction. When the CPU detects that a controller has asserted a signal on the interrupt-request line, the CPU performs a state save and jumps to the <strong>interrupt-handler routine</strong> at a fixed address in memory.</p>
+
+<p>Another example is found in the implementation of system calls. Usually, a program uses library calls to issue system calls. The library routines check the arguments given by the application, build a data structure to convey the arguments to the kernel, and then execute a special instruction called a <strong>software interrupt</strong>, or <strong>trap</strong>.</p>
+
+<h2>Direct Memory Access</h2>
+
+<p>For a device that does large transfers, such as a disk drive, it seems wasteful to use an expensive general-purpose processor to watch status bits and to feed data into a controller register one byte at a time—a process termed <strong>programmed I/O (PIO)</strong>. Many computers avoid burdening the main CPU with PIO by offloading some of this work to a special-purpose processor called a <strong>direct-memory-access (DMA) controller</strong>.</p>
+
+<p><img class="<a" src="href="https://farm8.staticflickr.com/7340/14029558121_fb7debb6a5_z.jpg">https://farm8.staticflickr.com/7340/14029558121_fb7debb6a5_z.jpg</a>" title="DMA_transfer.png" ></p>
+
+<h2>Blocking and Nonblocking I/O</h2>
+
+<p>An alternative to a nonblocking system call is an asynchronous system call. An asynchronous call returns immediately, without waiting for the I/O to complete.</p>
+
+<p>The difference between nonblocking and asynchronous system calls is that a nonblocking read() returns immediately with whatever data are available—the full number of bytes requested, fewer, or none at all. An asynchronous read() call requests a transfer that will be performed in its entirety but will complete at some future time.</p>
+
+<p><img class="<a" src="href="https://farm3.staticflickr.com/2927/14032739105_b20504ca80_z.jpg">https://farm3.staticflickr.com/2927/14032739105_b20504ca80_z.jpg</a>" title="syn_asyn_io.png" ></p>
+
+<h2>Buffering</h2>
+
+<p>A <strong>buffer</strong> is a memory area that stores data being transferred between two devices or between a device and an application.</p>
+
+<p>Buffering is done for three reasons.
+1. One reason is to cope with a speed mismatch between the producer and consumer of a data stream.
+2. A second use of buffering is to provide adaptations for devices that have different data-transfer sizes.
+3. A third use of buffering is to support <strong>copy semantics</strong> for application I/O.</p>
+
+<p>With <strong>copy semantics</strong>, the version of the data written to disk is guaranteed to be the version at the time of the application system call, independent of any subsequent changes in the application’s buffer. A simple way in which the operating system can guarantee copy semantics is for the write() system call to copy the application data into a kernel buffer before returning control to the application. The disk write is performed from the kernel buffer, so that subsequent changes to the application buffer have no effect.</p>
+
+<h2>Caching</h2>
+
+<p>A <strong>cache</strong> is a region of fast memory that holds copies of data.</p>
+
+<p>When the kernel receives a file I/O request, the kernel first accesses the buffer cache to see whether that region of the file is already available in main memory. If it is, a physical disk I/O can be avoided or deferred.</p>
+
+<h2>Transforming I/O Requests to Hardware Operations</h2>
+
+<p>The figure suggests that an I/O operation requires a great many steps that together consume a tremendous number of CPU cycles.</p>
+
+<ol>
+<li>A process issues a blocking read() system call to a file descriptor of a file that has been opened previously.</li>
+<li>The system-call code in the kernel checks the parameters for correctness. In the case of input, if the data are already available in the buffer cache, the data are returned to the process, and the I/O request is completed.</li>
+<li>Otherwise, a physical I/O must be performed. The process is removed from the run queue and is placed on the wait queue for the device, and the I/O request is scheduled. Eventually, the I/O subsystem sends the request to the device driver. Depending on the operating system, the request is sent via a subroutine call or an in-kernel message.</li>
+<li>The device driver allocates kernel buffer space to receive the data and schedules the I/O. Eventually, the driver sends commands to the device controller by writing into the device-control registers.</li>
+<li>The device controller operates the device hardware to perform the data transfer.</li>
+<li>The driver may poll for status and data, or it may have set up a DMA transfer into kernel memory. We assume that the transfer is managed by a DMA controller, which generates an interrupt when the transfer completes.</li>
+<li>The correct interrupt handler receives the interrupt via the interrupt- vector table, stores any necessary data, signals the device driver, and returns from the interrupt.</li>
+<li>The device driver receives the signal, determines which I/O request has completed, determines the request’s status, and signals the kernel I/O subsystem that the request has been completed.</li>
+<li>The kernel transfers data or return codes to the address space of the requesting process and moves the process from the wait queue back to the ready queue.</li>
+<li>Moving the process to the ready queue unblocks the process. When the scheduler assigns the process to the CPU, the process resumes execution at the completion of the system call.</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[TODO Reading Book List]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/04/23/todo-reading-book-list/"/>
+    <updated>2014-04-23T06:39:31+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/04/23/todo-reading-book-list</id>
+    <content type="html"><![CDATA[<p>List the title of the books with corresponding reference url, for those which begin with */** are highly recommended.</p>
+
+<h2>Fundamental</h2>
+
+<ol>
+<li>**<a href="http://www.amazon.com/Introduction-Algorithms-Thomas-H-Cormen/dp/0262033844/ref=sr_1_1?ie=UTF8&amp;qid=1398206561" title="amazon">Introduction to Algorithms</a></li>
+<li>*<a href="http://www.amazon.com/Operating-System-Concepts-Abraham-Silberschatz/dp/047050949X/ref=sr_1_1?ie=UTF8&amp;qid=1398206626" title="amazon">Operating System Concepts with Java</a></li>
+</ol>
+
+
+<h2>Java</h2>
+
+<ol>
+<li>**<a href="http://www.amazon.com/Thinking-Java-Edition-Bruce-Eckel/dp/0131872486/ref=sr_1_1?ie=UTF8&amp;qid=1398207134" title="amazon">Thinking in Java (4th Edition)</a> prefer to starting with collections&amp;container chapter</li>
+<li>*<a href="http://www.amazon.com/Java-Performance-Charlie-Hunt/dp/0137142528/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1398207290" title="amazon">Java Performance</a></li>
+<li><a href="http://www.amazon.com/Java-Nio-Ron-Hitchens/dp/0596002882/ref=sr_1_1?ie=UTF8&amp;qid=1398207507" title="amazon">Java Nio</a></li>
+<li><a href="http://www.amazon.com/Java-Message-Service-David-Chappell-ebook/dp/B0026OR3JY/ref=sr_1_1?ie=UTF8&amp;qid=1398207629" title="amazon">Java Message Service</a></li>
+</ol>
+
+
+<h2>Shell</h2>
+
+<h2>DataBase</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Operating System Concepts - VirtualMemory]]></title>
@@ -265,240 +376,6 @@
 
 
 <p>The virtualization software presents one or more virtual CPUs to each of the virtual machines running on the system and then schedules the use of the physical CPUs among the virtual machines.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Operating System Concepts - Process/Thread]]></title>
-    <link href="http://BobbyTang.github.io/blog/2014/03/25/operating-system-concepts-process-slash-thread/"/>
-    <updated>2014-03-25T05:57:31+08:00</updated>
-    <id>http://BobbyTang.github.io/blog/2014/03/25/operating-system-concepts-process-slash-thread</id>
-    <content type="html"><![CDATA[<h2>Process Control Block</h2>
-
-<p><strong>Process Control Block</strong> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
-
-<p>Process state. The state may be new, ready, running, waiting, halted, and so on.</p>
-
-<p>Program counter. The counter indicates the address of the next instruction to be executed for this process.</p>
-
-<p>CPU registers. They include accumulators, index registers, stack pointers, and general-purpose registers, plus any condition-code information. Along with the program counter, this state information must be saved when an interrupt occurs, to allow the process to be continued correctly afterward.</p>
-
-<p>CPU-scheduling information. This information includes a process priority, pointers to scheduling queues, and any other scheduling parameters.</p>
-
-<p>Memory-management information. This information may include such information as the value of the base and limit registers, the page tables, or the segment tables, depending on the memory system used by the operating system.</p>
-
-<p>Accounting information. This information includes the amount of CPU and real time used, time limits, account numbers, job or process numbers, and so on.</p>
-
-<p>I/O status information. This information includes the list of I/O devices allocated to the process, a list of open files, and so on.</p>
-
-<h2>Context Switch</h2>
-
-<p>A <strong>context switch</strong> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
-
-<p>A <strong>context</strong> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
-
-<p>A <strong>program counter</strong> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
-
-<p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
-
-<ol>
-<li><p>suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p></li>
-<li><p>retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p></li>
-<li><p>returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p></li>
-</ol>
-
-
-<h3>When to switch?</h3>
-
-<p>Context switches can occur only in kernel mode.</p>
-
-<p><strong>Multitasking</strong> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
-
-<p><strong>Interrupt handling</strong> 1.) Hardware interrupt</p>
-
-<p><strong>User and kernel mode switching</strong> may cause context switch.</p>
-
-<h2>Multithread programing</h2>
-
-<p>Benifits 1.) Responsiveness 2.)Resource sharing 3.) Economy 4.)Scalability</p>
-
-<h2>Multicore Programming</h2>
-
-<p>Concerns 1.) Dividing activities 2.)Balance Data splitting 3.)Data dependency 4.)Testing and debugging</p>
-
-<h2>Multithread Model</h2>
-
-<ul>
-<li>Many-to-one model</li>
-<li>One-to-one model</li>
-</ul>
-
-
-<p>The nptl(native posix thread library) implementation only uses a 1:1 thread model. The scheduler handles every thread as if it were a process. Therefore only the supported scope is PTHREAD_SCOPE_SYSTEM(Plesae see on Pthread Scheduling label). The default scheduling policy is SCHED_OTHER, which is the default Linux scheduler. The nptl implementation can utilize multiple CPUs.</p>
-
-<ul>
-<li>Many-to-many model</li>
-<li>Green thread</li>
-</ul>
-
-
-<p>On multi-CPU machines, native threads can run more than one thread simultaneously by assigning different threads to different CPUs. Green threads run on only one CPU.</p>
-
-<p>Green threads, the threads provided by the JVM, run at the user level, meaning that the JVM creates and schedules the threads itself. Therefore, the operating system kernel doesn&rsquo;t create or schedule them. Instead, the underlying OS sees the JVM only as one thread.</p>
-
-<ul>
-<li>Light weight process(LWP)
-In the traditional meaning of the term, as used in Unix System V and Solaris, a LWP runs in user space on top of a single kernel thread and shares its address space and system resources with other LWPs within the same process.</li>
-</ul>
-
-
-<h2>Pthread Scheduling</h2>
-
-<p>There are two possible contention scopes. PTHREAD_SCOPE_SYSTEM and PTHREAD_SCOPE_PROCESS. They can be set with pthread_attr_setscope(). The scope of a thread can only be specified before the thread is created.</p>
-
-<ul>
-<li>PTHREAD_SCOPE_SYSTEM</li>
-</ul>
-
-
-<p>A thread that has a scope of PTHREAD_SCOPE_SYSTEM will content with other processes and other PTHREAD_SCOPE_SYSTEM threads for the CPU.</p>
-
-<ul>
-<li>PTHREAD_SCOPE_PROCESS</li>
-</ul>
-
-
-<p>All threads of a process that have a scope of PTHREAD_SCOPE_PROCESS will be grouped together and this group of threads contents for the CPU. If there is a process with 4 PTHREAD_SCOPE_PROCESS threads and 4 PTHREAD_SCOPE_SYSTEM threds, then each of the PTHREAD_SCOPE_SYSTEM threads will get a fifth of the CPU and the other 4 PTHREAD_SCOPE_PROCESS threads will share the remaing fifth of the CPU. How the PTHREAD_SCOPE_PROCESS threads share their fifth of the CPU among themselves is determined by the scheduling policy and the thread&rsquo;s priority.</p>
-
-<h2>Process Creation</h2>
-
-<p>When a process creates a new process, two possibilities exist in terms of execution:</p>
-
-<ol>
-<li>The parent continues to execute concurrently with its children.</li>
-<li>The parent waits until some or all of its children have terminated.</li>
-</ol>
-
-
-<p>There are also two possibilities in terms of the address space of the new process:</p>
-
-<ol>
-<li>The child process is a duplicate of the parent process (it has the same program and data as the parent).</li>
-<li>The child process has a new program loaded into it.</li>
-</ol>
-
-
-<p>For example, if <code>clone()</code> is passed the flags <code>CLONE FS</code>, <code>CLONE VM</code>, <code>CLONE SIGHAND</code>, and <code>CLONE FILES</code>, the parent and child tasks will share the same file-system information (such as the current working directory), the same memory space, the same signal handlers, and the same set of open files.</p>
-
-<p>However, if none of these flags is set when <code>clone()</code> is invoked, no sharing takes place, resulting in functionality similar to that provided by the <code>fork()</code> system call.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Operating System Concepts - Terminology]]></title>
-    <link href="http://BobbyTang.github.io/blog/2014/03/05/operating-system-concepts-terminology/"/>
-    <updated>2014-03-05T05:04:59+08:00</updated>
-    <id>http://BobbyTang.github.io/blog/2014/03/05/operating-system-concepts-terminology</id>
-    <content type="html"><![CDATA[<p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.</p>
-
-<p>Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system.</p>
-
-<p>Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
-
-<h2>1.Storage Device Hierarchy</h2>
-
-<p>registers &mdash; > cache &mdash; > main memory (RAM random access memory) &mdash; > electronic disk &mdash; > magnetic disk &mdash; > optical disk &mdash; > magnetic tapes</p>
-
-<p><img src="https://farm4.staticflickr.com/3775/13508587744_aa4be3c238_o.png" title="cpu_cache_hierarchy" alt="Alt text" /></p>
-
-<h2>2.Symmetric Multiprocessing (SMP)</h2>
-
-<p>SMP systems are tightly coupled multiprocessor systems with a pool of homogeneous processors running independently, each processor executing different programs and working on different data and with capability of sharing common resources (memory, I/O device, interrupt system and so on) and connected using a system bus or a crossbar.</p>
-
-<pre><code>$uname -a
-Linux [nodename] 2.6.18-348.18.l.e15 #1 SMP [date] x86_64 x86_64 GUN/Linux
-</code></pre>
-
-<h2>3.Non-uniform Memory Access (NUMA)</h2>
-
-<p>NUMA is a computer memory design used in multiprocessing, where the memory access time depends on the memory location relative to the processor. Under NUMA, a processor can access its own local memory faster than non-local memory (memory local to another processor or memory shared between processors).</p>
-
-<h3>NUMA collector enhancements</h3>
-
-<ul>
-<li>The Parallel Scavenger garbage collector has been extended to take advantage of machines with NUMA (Non Uniform Memory Access) architecture.
-The NUMA-aware allocator can be turned on with the <code>-XX:+UseNUMA</code> flag in conjunction with the selection of the Parallel Scavenger garbage collector. The Parallel Scavenger garbage collector is the default for a server-class machine. The Parallel Scavenger garbage collector can also be turned on explicitly by specifying the <code>-XX:+UseParallelGC</code> option.
-If you want see the detail, please see <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/vm/performance-enhancements-7.html">oracle official document</a>.</li>
-</ul>
-
-
-<h2>4.Clustering</h2>
-
-<p>Clustering can be structured asymmetrically or symmetrically. In asymmetric clustering, one machine is in hot-standby mode while the other is running the applications. The hot-standby host machine does nothing but monitor the active server. If that server fails, the hot-standby host becomes the active server. In symmetric mode, two or more hosts are running applications and are monitoring each other. This mode is obviously more efficient, as it uses all of the available hardware. It does require that more than one application be available to run.</p>
-
-<p>For example in real-world scenario: The secondary EMS server is hot-standby mode. Two Weblogic servers are symmetric mode and load balance.</p>
-
-<h2>5.Network</h2>
-
-<h3>5.1.local area network (LAN)</h3>
-
-<p>A local area network (LAN) is a computer network that user interconnects computers in a limited area such as a home, school, computer laboratory, or office building using network media.</p>
-
-<h3>5.2.storage-area network(SAN)</h3>
-
-<p>SANs are primarily used to enhance storage devices, such as disk arrays, tape libraries, and optical jukeboxes, accessible to servers so that the devices appear like locally attached devices to the operating system.</p>
-
-<h3>5.3.wide area network (WAN)</h3>
-
-<p>A wide area network (WAN) is a network that covers a broad area (i.e., any telecommunications network that links across metropolitan, regional, or national boundaries) using private or public network transports. WANs are often built using leased lines. WANs can also be built using less costly circuit switching or packet switching methods.</p>
-
-<h2>6.Computing Environments</h2>
-
-<h3>6.1.traditional computing</h3>
-
-<p><strong>Batch systems</strong> processed jobs in bulk, with predetermined input (from files or other sources of data).</p>
-
-<p><strong>Time-sharing</strong> systems used a timer and scheduling algorithms to rapidly cycle processes through the CPU, giving each user a share of the resources. Time-sharing systems are an extension of multiprogramming wherein CPU scheduling algorithms rapidly switch between jobs, thus providing the illusion that all jobs are running concurrently.</p>
-
-<h3>6.2client–Server computing (compute or file server system)</h3>
-
-<p>A <strong>socket</strong> is identified by an IP address concatenated with a port number. Servers implementing specific services (such as telnet, FTP, and HTTP) listen to well-known ports (a telnet server listens to port 23; an FTP server listens to port 21; and a Web, or HTTP, server listens to port 80).</p>
-
-<p>The <strong>remote procedure calls (RPCs)</strong> was designed as a way to abstract the procedure-call mechanism for use between systems with network connections.</p>
-
-<p><strong>Remote method invocation (RMI)</strong> is a Java feature similar to RPCs.</p>
-
-<h3>6.3.peer-to-peer computing</h3>
-
-<h3>6.4.web-based computing</h3>
-
-<h2>7.System Calls</h2>
-
-<p>In computing, a system call is how a program requests a service from an operating system&rsquo;s kernel.
-System calls provide an essential interface between a process and the operating system.
-System calls can be grouped roughly into six major categories: process control, file manipulation, device manipulation, information maintenance, communications, and protection.</p>
-
-<p>To monitor and trace the system call within the process, we can use strace command in Linux.
-Strace is used for debugging and troubleshooting the execution of an executable on Linux environment. It displays the system calls used by the process, and the signals received by the process.</p>
-
-<pre><code>$strace
-</code></pre>
-
-<h2>8.Interprocess Communication</h2>
-
-<p>There are two common models of interprocess communication:</p>
-
-<h3>8.1.message-passing model</h3>
-
-<p><strong>Message passing</strong> is useful for exchanging smaller amounts of data, because no conflicts need be avoided.</p>
-
-<p>Message passing may be either blocking or nonblocking— also known as synchronous and asynchronous. 1.)<strong>Blocking send</strong> 2.)<strong>Nonblocking send</strong> 3.)<strong>Blockingreceive</strong> 4.)<strong>Nonblocking receive</strong></p>
-
-<p>Whether communication is direct or indirect, messages exchanged by commu- nicating processes reside in a temporary queue. 1.)<strong>Zero capacity</strong> 2.)<strong>Boundedcapacity</strong> 3.)<strong>Unboundedcapacity</strong></p>
-
-<h3>8.2.shared-memory model</h3>
-
-<p>In the <strong>shared-memory</strong> model, processes use shared memory create and shared memory attach system calls to create and gain access to regions of memory owned by other processes.</p>
 ]]></content>
   </entry>
   

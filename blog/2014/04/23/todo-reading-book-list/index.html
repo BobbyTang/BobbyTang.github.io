@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Operating System Concepts - CPU - BobbyTang Blog</title>
+  <title>TODO Reading Book List - BobbyTang Blog</title>
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="CPU Scheduling CPU scheduling is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to &hellip;">
+  <meta name="description" content="List the title of the books with corresponding reference url, for those which begin with */** are highly recommended. Fundamental **Introduction to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu">
+  <link rel="canonical" href="http://BobbyTang.github.io/blog/2014/04/23/todo-reading-book-list">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="BobbyTang Blog" type="application/atom+xml">
@@ -68,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Operating System Concepts - CPU</h1>
+      <h1 class="entry-title">TODO Reading Book List</h1>
     
     
       <p class="meta">
@@ -84,7 +84,7 @@
   
 
 
-<time datetime="2014-04-02T06:30:57+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+<time datetime="2014-04-23T06:39:31+08:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://BobbyTang.github.io">Comments</a>
@@ -94,82 +94,29 @@
   </header>
 
 
-<div class="entry-content"><h2>CPU Scheduling</h2>
+<div class="entry-content"><p>List the title of the books with corresponding reference url, for those which begin with */** are highly recommended.</p>
 
-<p><strong>CPU scheduling</strong> is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to the selected process by the dispatcher.</p>
+<h2>Fundamental</h2>
 
-<h2>Scheduling Criteria</h2>
-
-<ul>
-<li>CPU utilization</li>
-<li>Throughput</li>
-<li>Turnaround time</li>
-</ul>
+<ol>
+<li>**<a href="http://www.amazon.com/Introduction-Algorithms-Thomas-H-Cormen/dp/0262033844/ref=sr_1_1?ie=UTF8&amp;qid=1398206561" title="amazon">Introduction to Algorithms</a></li>
+<li>*<a href="http://www.amazon.com/Operating-System-Concepts-Abraham-Silberschatz/dp/047050949X/ref=sr_1_1?ie=UTF8&amp;qid=1398206626" title="amazon">Operating System Concepts with Java</a></li>
+</ol>
 
 
-<p>The interval from the time of submission of a process to the time of completion is the turnaround time. <strong>Turnaround time</strong> is the sum of the periods spent waiting to get into memory, waiting in the ready queue, executing on the CPU, and doing I/O.</p>
+<h2>Java</h2>
 
-<ul>
-<li>Waiting time</li>
-<li>Response time</li>
-</ul>
-
-
-<h2>Scheduling Alogrithm</h2>
-
-<ul>
-<li>First-Come, First-Served Scheduling</li>
-<li>Shortest-Job-First Scheduling</li>
-<li>Priority Scheduling</li>
-</ul>
+<ol>
+<li>**<a href="http://www.amazon.com/Thinking-Java-Edition-Bruce-Eckel/dp/0131872486/ref=sr_1_1?ie=UTF8&amp;qid=1398207134" title="amazon">Thinking in Java (4th Edition)</a> prefer to starting with collections&amp;container chapter</li>
+<li>*<a href="http://www.amazon.com/Java-Performance-Charlie-Hunt/dp/0137142528/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1398207290" title="amazon">Java Performance</a></li>
+<li><a href="http://www.amazon.com/Java-Nio-Ron-Hitchens/dp/0596002882/ref=sr_1_1?ie=UTF8&amp;qid=1398207507" title="amazon">Java Nio</a></li>
+<li><a href="http://www.amazon.com/Java-Message-Service-David-Chappell-ebook/dp/B0026OR3JY/ref=sr_1_1?ie=UTF8&amp;qid=1398207629" title="amazon">Java Message Service</a></li>
+</ol>
 
 
-<p>A major problem with priority scheduling algorithms is <strong>indefinite blocking</strong>, or <strong>starvation</strong>.</p>
+<h2>Shell</h2>
 
-<p>A solution to the problem of indefinite blockage of low-priority processes is <strong>aging</strong>.</p>
-
-<ul>
-<li>Round-Robin Scheduling</li>
-<li>Multilevel Queue Scheduling</li>
-<li>Multilevel Feedback Queue Scheduling</li>
-</ul>
-
-
-<h2>Multiple-Processor/Multicore Scheduling</h2>
-
-<ul>
-<li>Processor Affinity</li>
-</ul>
-
-
-<p>Because of the high cost of invalidating and repopulating caches, most SMP systems try to avoid migration of processes from one processor to another and instead attempt to keep a process running on the same processor. This is known as <strong>processor affinity</strong>.</p>
-
-<p>Some systems — such as Linux — also provide system calls that support hard affinity, thereby allowing a process to specify that it is not to migrate to other processors.</p>
-
-<p>The main-memory architecture of a system can affect processor affinity issues. Recall the knowledge non-uniform memory access (NUMA) mentioned in previous post, in which a CPU has faster access to some parts of main memory than to other parts.</p>
-
-<ul>
-<li>Load Balancing</li>
-</ul>
-
-
-<p>Load balancing attempts to keep the workload evenly distributed across all processors in an SMP system. It is important to note that load balancing is typically only necessary on systems where each processor has its own private queue of eligible processes to execute.</p>
-
-<p>There are two general approaches to load balancing: <strong>push migration</strong> and <strong>pull migration</strong>. Linux runs its load-balancing algorithm every 200 milliseconds (push migration) or whenever the run queue for a processor is empty (pull migration).</p>
-
-<ul>
-<li>Memory Stall</li>
-</ul>
-
-
-<p>Researchers have discovered that when a processor accesses memory, it spends a significant amount of time waiting for the data to become available. This situation, known as a <strong>memory stall</strong>, may occur for various reasons, such as a <strong>cache miss</strong> (accessing data that are not in cache memory).</p>
-
-<ul>
-<li>Virtualization</li>
-</ul>
-
-
-<p>The virtualization software presents one or more virtual CPUs to each of the virtual machines running on the system and then schedules the use of the physical CPUs among the virtual machines.</p>
+<h2>DataBase</h2>
 </div>
 
 
@@ -192,7 +139,7 @@
   
 
 
-<time datetime="2014-04-02T06:30:57+08:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2014</time>
+<time datetime="2014-04-23T06:39:31+08:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
       
 
 <span class="categories">
@@ -213,10 +160,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/" title="Previous Post: Operating system concepts - Process/Thread">&laquo; Operating system concepts - Process/Thread</a>
+        <a class="basic-alignment left" href="/blog/2014/04/23/operating-system-concepts-virtualmemory/" title="Previous Post: Operating system concepts - VirtualMemory">&laquo; Operating system concepts - VirtualMemory</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/04/09/operating-system-concepts-mainmemory/" title="Next Post: Operating system concepts - MainMemory">Operating system concepts - MainMemory &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/04/27/operating-system-concepts-memorymapped-file/" title="Next Post: Operating system concepts - MemoryMapped File">Operating system concepts - MemoryMapped File &raquo;</a>
       
     </p>
   </footer>
@@ -291,8 +238,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/';
-        var disqus_url = 'http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/';
+        var disqus_identifier = 'http://BobbyTang.github.io/blog/2014/04/23/todo-reading-book-list/';
+        var disqus_url = 'http://BobbyTang.github.io/blog/2014/04/23/todo-reading-book-list/';
         var disqus_script = 'embed.js';
       
     (function () {
