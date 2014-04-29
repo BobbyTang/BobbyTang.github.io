@@ -9,7 +9,7 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="I/O Hardware The device communicates with the machine via a connection point, or port — for example, a serial port. If devices use a common set of &hellip;">
+  <meta name="description" content="Python is a script language, the main idea for learning python is to utilize python to create easy hands-on automation script on linux env instead of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/29/python-environment-setup/">Python Environment Setup</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-29T08:10:26+08:00" pubdate data-updated="true">Apr 29<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/04/29/python-environment-setup/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/04/29/python-environment-setup/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Python is a script language, the main idea for learning python is to utilize python to create easy hands-on automation script on linux env instead of shell.</p>
+
+<p>Here, list the steps to configure PyDev, an eclipse plugin, inside eclipse environment.</p>
+
+<ol>
+<li>Access PyDev webpage: <a href="http://pydev.org/manual_101_install.html">http://pydev.org/manual_101_install.html</a></li>
+<li>Download PyDev certificate</li>
+<li>cd %JAVA_HOME%/bin</li>
+<li>Run command: keytool.exe -import -file C:/download/pydev_certificate.cer -keystore %JAVA_HOME%/jre/lib/security/cacerts</li>
+<li>Input default JDK cacerts password: changeit</li>
+<li>Certificate installment completed</li>
+<li>Download eclipse plugin on marketplace, or mannually download it and extract into dropins directory like: (dropins/pydev/eclipse/&hellip;)</li>
+<li>Edit eclipse.ini, convert -vm=&hellip; JDK must be 1.7</li>
+<li>Access JPython webpage: <a href="https://wiki.python.org/jython/InstallationInstructions">https://wiki.python.org/jython/InstallationInstructions</a></li>
+<li>Download Jython 2.5.4rc1 &ndash; Traditional Installer at link: <a href="http://jython.org/downloads.html">http://jython.org/downloads.html</a></li>
+<li>Run command: java -jar jython_installer-2.5.2.jar &mdash;console</li>
+<li>Configure JPython interceptor in PvDev eclipse plugin</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -974,144 +1031,6 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/05/operating-system-concepts-terminology/">Operating System Concepts - Terminology</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-05T05:04:59+08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/03/05/operating-system-concepts-terminology/#disqus_thread"
-             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/05/operating-system-concepts-terminology/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The aim of this post is to review the crucial terms of operating-system and basic interaction of these underlying components.</p>
-
-<p>Before starting with topic, I am going to reveal why I try to read books of OS related at this point. Let me conclude the reasons, first and foremost, various applications in my daily work encounter issues that are associated with LINUX system, such as buffer size, open file limits and unable to create native threads etc. All of these issues point out to the knowledge of OS. Next, Java performance tuning is always based on the operating system concept, like memory management, cpu utilization etc. Furthermore, including all the design concepts are derived from the solution of common issue inside operating system.</p>
-
-<p>Due to these, it is so encouraged to read and go through operating system concept again that I could be inspired and get everything tied. If there are any findings or association with Java, I will make more explanations and comments linked with definitive resource.</p>
-
-<h2>1.Storage Device Hierarchy</h2>
-
-<p>registers &mdash; > cache &mdash; > main memory (RAM random access memory) &mdash; > electronic disk &mdash; > magnetic disk &mdash; > optical disk &mdash; > magnetic tapes</p>
-
-<p><img src="https://farm4.staticflickr.com/3775/13508587744_aa4be3c238_o.png" title="cpu_cache_hierarchy" alt="Alt text" /></p>
-
-<h2>2.Symmetric Multiprocessing (SMP)</h2>
-
-<p>SMP systems are tightly coupled multiprocessor systems with a pool of homogeneous processors running independently, each processor executing different programs and working on different data and with capability of sharing common resources (memory, I/O device, interrupt system and so on) and connected using a system bus or a crossbar.</p>
-
-<pre><code>$uname -a
-Linux [nodename] 2.6.18-348.18.l.e15 #1 SMP [date] x86_64 x86_64 GUN/Linux
-</code></pre>
-
-<h2>3.Non-uniform Memory Access (NUMA)</h2>
-
-<p>NUMA is a computer memory design used in multiprocessing, where the memory access time depends on the memory location relative to the processor. Under NUMA, a processor can access its own local memory faster than non-local memory (memory local to another processor or memory shared between processors).</p>
-
-<h3>NUMA collector enhancements</h3>
-
-<ul>
-<li>The Parallel Scavenger garbage collector has been extended to take advantage of machines with NUMA (Non Uniform Memory Access) architecture.
-The NUMA-aware allocator can be turned on with the <code>-XX:+UseNUMA</code> flag in conjunction with the selection of the Parallel Scavenger garbage collector. The Parallel Scavenger garbage collector is the default for a server-class machine. The Parallel Scavenger garbage collector can also be turned on explicitly by specifying the <code>-XX:+UseParallelGC</code> option.
-If you want see the detail, please see <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/vm/performance-enhancements-7.html">oracle official document</a>.</li>
-</ul>
-
-
-<h2>4.Clustering</h2>
-
-<p>Clustering can be structured asymmetrically or symmetrically. In asymmetric clustering, one machine is in hot-standby mode while the other is running the applications. The hot-standby host machine does nothing but monitor the active server. If that server fails, the hot-standby host becomes the active server. In symmetric mode, two or more hosts are running applications and are monitoring each other. This mode is obviously more efficient, as it uses all of the available hardware. It does require that more than one application be available to run.</p>
-
-<p>For example in real-world scenario: The secondary EMS server is hot-standby mode. Two Weblogic servers are symmetric mode and load balance.</p>
-
-<h2>5.Network</h2>
-
-<h3>5.1.local area network (LAN)</h3>
-
-<p>A local area network (LAN) is a computer network that user interconnects computers in a limited area such as a home, school, computer laboratory, or office building using network media.</p>
-
-<h3>5.2.storage-area network(SAN)</h3>
-
-<p>SANs are primarily used to enhance storage devices, such as disk arrays, tape libraries, and optical jukeboxes, accessible to servers so that the devices appear like locally attached devices to the operating system.</p>
-
-<h3>5.3.wide area network (WAN)</h3>
-
-<p>A wide area network (WAN) is a network that covers a broad area (i.e., any telecommunications network that links across metropolitan, regional, or national boundaries) using private or public network transports. WANs are often built using leased lines. WANs can also be built using less costly circuit switching or packet switching methods.</p>
-
-<h2>6.Computing Environments</h2>
-
-<h3>6.1.traditional computing</h3>
-
-<p><strong>Batch systems</strong> processed jobs in bulk, with predetermined input (from files or other sources of data).</p>
-
-<p><strong>Time-sharing</strong> systems used a timer and scheduling algorithms to rapidly cycle processes through the CPU, giving each user a share of the resources. Time-sharing systems are an extension of multiprogramming wherein CPU scheduling algorithms rapidly switch between jobs, thus providing the illusion that all jobs are running concurrently.</p>
-
-<h3>6.2client–Server computing (compute or file server system)</h3>
-
-<p>A <strong>socket</strong> is identified by an IP address concatenated with a port number. Servers implementing specific services (such as telnet, FTP, and HTTP) listen to well-known ports (a telnet server listens to port 23; an FTP server listens to port 21; and a Web, or HTTP, server listens to port 80).</p>
-
-<p>The <strong>remote procedure calls (RPCs)</strong> was designed as a way to abstract the procedure-call mechanism for use between systems with network connections.</p>
-
-<p><strong>Remote method invocation (RMI)</strong> is a Java feature similar to RPCs.</p>
-
-<h3>6.3.peer-to-peer computing</h3>
-
-<h3>6.4.web-based computing</h3>
-
-<h2>7.System Calls</h2>
-
-<p>In computing, a system call is how a program requests a service from an operating system&rsquo;s kernel.
-System calls provide an essential interface between a process and the operating system.
-System calls can be grouped roughly into six major categories: process control, file manipulation, device manipulation, information maintenance, communications, and protection.</p>
-
-<p>To monitor and trace the system call within the process, we can use strace command in Linux.
-Strace is used for debugging and troubleshooting the execution of an executable on Linux environment. It displays the system calls used by the process, and the signals received by the process.</p>
-
-<pre><code>$strace
-</code></pre>
-
-<h2>8.Interprocess Communication</h2>
-
-<p>There are two common models of interprocess communication:</p>
-
-<h3>8.1.message-passing model</h3>
-
-<p><strong>Message passing</strong> is useful for exchanging smaller amounts of data, because no conflicts need be avoided.</p>
-
-<p>Message passing may be either blocking or nonblocking— also known as synchronous and asynchronous. 1.)<strong>Blocking send</strong> 2.)<strong>Nonblocking send</strong> 3.)<strong>Blockingreceive</strong> 4.)<strong>Nonblocking receive</strong></p>
-
-<p>Whether communication is direct or indirect, messages exchanged by commu- nicating processes reside in a temporary queue. 1.)<strong>Zero capacity</strong> 2.)<strong>Boundedcapacity</strong> 3.)<strong>Unboundedcapacity</strong></p>
-
-<h3>8.2.shared-memory model</h3>
-
-<p>In the <strong>shared-memory</strong> model, processes use shared memory create and shared memory attach system calls to create and gain access to regions of memory owned by other processes.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1125,7 +1044,9 @@ Strace is used for debugging and troubleshooting the execution of an executable 
     <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/books/'>books (7)</a></li>
+    <li class='category'><a href='/blog/categories/devenvsetup/'>DevEnvSetup (1)</a></li>
+<li class='category'><a href='/blog/categories/python/'>Python (1)</a></li>
+<li class='category'><a href='/blog/categories/books/'>books (7)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
 
@@ -1134,6 +1055,10 @@ Strace is used for debugging and troubleshooting the execution of an executable 
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/29/python-environment-setup/">Python Environment Setup</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/27/operating-system-concepts-io-system/">Operating System Concepts - IO System</a>
@@ -1149,10 +1074,6 @@ Strace is used for debugging and troubleshooting the execution of an executable 
     
       <li class="post">
         <a href="/blog/2014/04/23/operating-system-concepts-virtualmemory/">Operating System Concepts - VirtualMemory</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/09/operating-system-concepts-mainmemory/">Operating System Concepts - MainMemory</a>
       </li>
     
   </ul>
