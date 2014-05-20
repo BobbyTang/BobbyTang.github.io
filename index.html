@@ -9,7 +9,7 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="Python is a script language, the main idea for learning python is to utilize python to create easy hands-on automation script on linux env instead of &hellip;">
+  <meta name="description" content="Bottom Up Approach Bottom up begins at the lowest level of the software stack, at the CPU level looking at statistics such as CPU cache misses, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,130 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/21/java-performance-os-monitoring/">Java Performance - OS Monitoring</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-21T00:16:37+08:00" pubdate data-updated="true">May 21<span>st</span>, 2014</time>
+        
+           | <a href="/blog/2014/05/21/java-performance-os-monitoring/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/05/21/java-performance-os-monitoring/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Bottom Up Approach</h2>
+
+<p>Bottom up begins at the lowest level of the software stack, at the CPU level looking at statistics such as CPU cache misses, inefficient use of CPU instructions, and then working up the software stack at what constructs or idioms are used by the application.</p>
+
+<h2>Choosing the Right CPU Architecture</h2>
+
+<p>One of the major design points behind the SPARC T-series processors is to address CPU cache misses by introducing multiple hardware threads per core.</p>
+
+<h2>CPU Utilization</h2>
+
+<p>A system with a single CPU socket with a quad core processor with hyperthreading disabled will show four CPUs in the GNOME System Monitor and report four virtual processors using the Java API Runtime.availableProcessors().</p>
+
+<pre><code>xosview
+vmstat
+mpstat
+top 
+</code></pre>
+
+<p>Which java thread is consuming CPU?</p>
+
+<pre><code>jstack
+</code></pre>
+
+<h2>Monitoring Linux CPU Scheduler Run Queue</h2>
+
+<pre><code>vmstat
+</code></pre>
+
+<h2>Memory Utilization</h2>
+
+<pre><code>top
+/proc/meminf
+</code></pre>
+
+<p>However, the following vmstat output from a Linux system illustrates a system that is experiencing swapping.  P36</p>
+
+<h2>Monitoring Lock Contention on Linux</h2>
+
+<pre><code>pidstat -w -I -p 9391 5
+</code></pre>
+
+<p>Hence, 3500 divided by 2, the num- ber of virtual processors = 1750. 1750 * 80,000 = 140,000,000. The number of clock cycles in 1 second on a 3.0GHz processor is 3,000,000,000. Thus, the percentage of clock cycles wasted on context switches is 140,000,000/3,000,000,000 = 4.7%.</p>
+
+<p>The cost of a voluntary context switch at a processor clock cycle level is an expensive operation, generally upwards of about 80,000 clock cycles.</p>
+
+<p>Again applying the general guideline of 3% to 5% of clock cycles spent in voluntary context switches implies a Java application that may be suffering from lock contention.</p>
+
+<h2>Quick Lock Contention Monitoring</h2>
+
+<h2>Isolating Hot Locks</h2>
+
+<p>A common practice to find contended locks in a Java application has been to periodically take thread dumps and look for threads that tend to be blocked on the same lock across several thread dumps.</p>
+
+<h2>Monitoring Involuntary Context Switches</h2>
+
+<p>In contrast to voluntary context switching where an executing thread voluntarily takes itself off the CPU, involun- tary thread context switches occur when a thread is taken off the CPU as a result of an expiring time quantum or has been preempted by a higher priority thread.</p>
+
+<p>Involuntary context switches can also be monitored on Linux using <code>pidstat -w</code>. High involuntary context switches are an indication there are more threads ready to run than there are virtual processors available to run them. As a result it is common to observe a high run queue depth in vmstat, high CPU utilization, and a high number of migrations (migrations are the next topic in this section) in conjunction with a large number of involuntary context switches.</p>
+
+<p>On Linux, creation of processor sets and assigning applications to those processor sets can be accomplished using the Linux <code>taskset</code> command.</p>
+
+<h2>Monitoring Thread Migrations</h2>
+
+<p>As a general guideline, Java applications scaling across multiple cores or virtual processors and observing migrations greater than 500 per second could benefit from binding Java applications to processor sets.</p>
+
+<h2>Network I/O Utilization</h2>
+
+<pre><code>netstat -i 
+nicstat
+</code></pre>
+
+<h2>Disk I/O Utilization</h2>
+
+<pre><code>iostat -xm
+</code></pre>
+
+<p>One of the challenges with monitoring disk I/O utilization is identifying which files are being read or written to and which application is the source of the disk activity.</p>
+
+<p>At the application level any strategy to minimize disk activity will help such as reducing the number of read and write operations using buffered input and output streams or integrating a caching data structure into the application to reduce or eliminate disk interaction.</p>
+
+<h2>Additional Command Line Tools</h2>
+
+<pre><code>sar
+</code></pre>
+
+<h2>Monitoring CPU Utilization on SPARC T-Series Systems</h2>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -904,133 +1028,6 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/">SQL - Switch/Transpose Columns and Rows</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-10T00:28:27+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/#disqus_thread"
-             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/10/sql-switch-slash-transpose-columns-and-rows/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In practice, we will meet the requirement to rotate the table including convert cols to rows, convert rows to cols. In this session, I&rsquo;ll produce the solution in common method as well as db-specified features.</p>
-
-<h2>Convert columns to rows</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--common solution</span>
-</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">(</span>
-</span><span class='line'>  <span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;col_1&#39;</span> <span class="k">as</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_1</span> <span class="k">as</span> <span class="n">col_val</span>
-</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
-</span><span class='line'>  <span class="k">union</span> <span class="k">all</span>
-</span><span class='line'>  <span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="s1">&#39;col_2&#39;</span> <span class="k">as</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_2</span> <span class="k">as</span> <span class="n">col_val</span>
-</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
-</span><span class='line'>  <span class="k">union</span> <span class="k">all</span>
-</span><span class='line'>  <span class="p">...</span>
-</span><span class='line'><span class="p">)</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--oracle 11g unpivot query</span>
-</span><span class='line'><span class="k">select</span> <span class="o">*</span>
-</span><span class='line'><span class="k">from</span> <span class="k">table</span>
-</span><span class='line'><span class="n">unpivot</span> <span class="p">(</span>
-</span><span class='line'>  <span class="n">col_val</span> <span class="k">for</span> <span class="n">col_name</span> <span class="k">in</span> <span class="p">(</span><span class="n">col_1</span> <span class="k">as</span> <span class="s1">&#39;col_1&#39;</span><span class="p">,</span> <span class="n">col_2</span> <span class="k">as</span> <span class="s1">&#39;col_2&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'><span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Concert rows to columns</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">--common solution</span>
-</span><span class='line'>  <span class="k">select</span> <span class="n">id</span><span class="p">,</span>
-</span><span class='line'>      <span class="k">max</span><span class="p">(</span><span class="k">case</span> <span class="k">when</span> <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;col_1&#39;</span> <span class="k">then</span> <span class="n">col_val</span> <span class="k">else</span> <span class="k">null</span> <span class="k">end</span><span class="p">)</span> <span class="k">as</span> <span class="n">col_1</span><span class="p">,</span>
-</span><span class='line'>      <span class="k">max</span><span class="p">(</span><span class="k">case</span> <span class="k">when</span> <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;col_2&#39;</span> <span class="k">then</span> <span class="n">col_val</span> <span class="k">else</span> <span class="k">null</span> <span class="k">end</span><span class="p">)</span> <span class="k">as</span> <span class="n">col_2</span><span class="p">,</span>
-</span><span class='line'>      <span class="p">...</span>
-</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
-</span><span class='line'>  <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'>  <span class="c1">--oracle 11g pivot query</span>
-</span><span class='line'>  <span class="k">select</span> <span class="o">*</span>
-</span><span class='line'>  <span class="k">from</span> <span class="k">table</span>
-</span><span class='line'>  <span class="n">pivot</span> <span class="p">(</span>
-</span><span class='line'>      <span class="k">max</span><span class="p">(</span><span class="n">col_val</span><span class="p">)</span> <span class="k">for</span> <span class="n">col_name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;col_1&#39;</span> <span class="k">as</span> <span class="n">col_1</span><span class="p">,</span><span class="s1">&#39;col_2&#39;</span> <span class="k">as</span> <span class="n">col_2</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">)</span>
-</span><span class='line'>  <span class="k">where</span> <span class="p">...</span>
-</span><span class='line'>  <span class="k">order</span> <span class="k">by</span> <span class="n">id</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Excel pivot table</h2>
-
-<p>For non-sql approaches, we can use excel pivot table. Excel spreadsheets are a great way to pivot and analyze Oracle data, and tools.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1046,7 +1043,7 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
   <ul id="categories">
     <li class='category'><a href='/blog/categories/devenvsetup/'>DevEnvSetup (1)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (1)</a></li>
-<li class='category'><a href='/blog/categories/books/'>books (7)</a></li>
+<li class='category'><a href='/blog/categories/books/'>books (8)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
 
@@ -1055,6 +1052,10 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/21/java-performance-os-monitoring/">Java Performance - OS Monitoring</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/29/python-environment-setup/">Python Environment Setup</a>
@@ -1070,10 +1071,6 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
     
       <li class="post">
         <a href="/blog/2014/04/23/todo-reading-book-list/">TODO Reading Book List</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/23/operating-system-concepts-virtualmemory/">Operating System Concepts - VirtualMemory</a>
       </li>
     
   </ul>

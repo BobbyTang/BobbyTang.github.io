@@ -4,7 +4,7 @@
   <title><![CDATA[BobbyTang Blog]]></title>
   <link href="http://BobbyTang.github.io/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
-  <updated>2014-04-29T08:28:41+08:00</updated>
+  <updated>2014-05-21T00:59:37+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
   <author>
     <name><![CDATA[BobbyTang]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Java Performance - OS Monitoring]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/05/21/java-performance-os-monitoring/"/>
+    <updated>2014-05-21T00:16:37+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/05/21/java-performance-os-monitoring</id>
+    <content type="html"><![CDATA[<h2>Bottom Up Approach</h2>
+
+<p>Bottom up begins at the lowest level of the software stack, at the CPU level looking at statistics such as CPU cache misses, inefficient use of CPU instructions, and then working up the software stack at what constructs or idioms are used by the application.</p>
+
+<h2>Choosing the Right CPU Architecture</h2>
+
+<p>One of the major design points behind the SPARC T-series processors is to address CPU cache misses by introducing multiple hardware threads per core.</p>
+
+<h2>CPU Utilization</h2>
+
+<p>A system with a single CPU socket with a quad core processor with hyperthreading disabled will show four CPUs in the GNOME System Monitor and report four virtual processors using the Java API Runtime.availableProcessors().</p>
+
+<pre><code>xosview
+vmstat
+mpstat
+top 
+</code></pre>
+
+<p>Which java thread is consuming CPU?</p>
+
+<pre><code>jstack
+</code></pre>
+
+<h2>Monitoring Linux CPU Scheduler Run Queue</h2>
+
+<pre><code>vmstat
+</code></pre>
+
+<h2>Memory Utilization</h2>
+
+<pre><code>top
+/proc/meminf
+</code></pre>
+
+<p>However, the following vmstat output from a Linux system illustrates a system that is experiencing swapping.  P36</p>
+
+<h2>Monitoring Lock Contention on Linux</h2>
+
+<pre><code>pidstat -w -I -p 9391 5
+</code></pre>
+
+<p>Hence, 3500 divided by 2, the num- ber of virtual processors = 1750. 1750 * 80,000 = 140,000,000. The number of clock cycles in 1 second on a 3.0GHz processor is 3,000,000,000. Thus, the percentage of clock cycles wasted on context switches is 140,000,000/3,000,000,000 = 4.7%.</p>
+
+<p>The cost of a voluntary context switch at a processor clock cycle level is an expensive operation, generally upwards of about 80,000 clock cycles.</p>
+
+<p>Again applying the general guideline of 3% to 5% of clock cycles spent in voluntary context switches implies a Java application that may be suffering from lock contention.</p>
+
+<h2>Quick Lock Contention Monitoring</h2>
+
+<h2>Isolating Hot Locks</h2>
+
+<p>A common practice to find contended locks in a Java application has been to periodically take thread dumps and look for threads that tend to be blocked on the same lock across several thread dumps.</p>
+
+<h2>Monitoring Involuntary Context Switches</h2>
+
+<p>In contrast to voluntary context switching where an executing thread voluntarily takes itself off the CPU, involun- tary thread context switches occur when a thread is taken off the CPU as a result of an expiring time quantum or has been preempted by a higher priority thread.</p>
+
+<p>Involuntary context switches can also be monitored on Linux using <code>pidstat -w</code>. High involuntary context switches are an indication there are more threads ready to run than there are virtual processors available to run them. As a result it is common to observe a high run queue depth in vmstat, high CPU utilization, and a high number of migrations (migrations are the next topic in this section) in conjunction with a large number of involuntary context switches.</p>
+
+<p>On Linux, creation of processor sets and assigning applications to those processor sets can be accomplished using the Linux <code>taskset</code> command.</p>
+
+<h2>Monitoring Thread Migrations</h2>
+
+<p>As a general guideline, Java applications scaling across multiple cores or virtual processors and observing migrations greater than 500 per second could benefit from binding Java applications to processor sets.</p>
+
+<h2>Network I/O Utilization</h2>
+
+<pre><code>netstat -i 
+nicstat
+</code></pre>
+
+<h2>Disk I/O Utilization</h2>
+
+<pre><code>iostat -xm
+</code></pre>
+
+<p>One of the challenges with monitoring disk I/O utilization is identifying which files are being read or written to and which application is the source of the disk activity.</p>
+
+<p>At the application level any strategy to minimize disk activity will help such as reducing the number of read and write operations using buffered input and output streams or integrating a caching data structure into the application to reduce or eliminate disk interaction.</p>
+
+<h2>Additional Command Line Tools</h2>
+
+<pre><code>sar
+</code></pre>
+
+<h2>Monitoring CPU Utilization on SPARC T-Series Systems</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Python Environment Setup]]></title>
@@ -896,7 +990,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://daringfireball.net/projects/markdown/syntax#em">http://daringfireball.net/projects/markdown/syntax#em</a>
-<a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x61;&#100;&#x64;&#x72;&#101;&#x73;&#x73;&#x40;&#101;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;">&#x61;&#x64;&#100;&#x72;&#101;&#x73;&#x73;&#x40;&#101;&#x78;&#97;&#109;&#112;&#x6c;&#x65;&#46;&#x63;&#111;&#x6d;</a></p>
+<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#x61;&#x64;&#x64;&#x72;&#101;&#x73;&#x73;&#64;&#x65;&#x78;&#x61;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#111;&#x6d;">&#97;&#x64;&#x64;&#114;&#101;&#x73;&#115;&#64;&#x65;&#x78;&#x61;&#109;&#112;&#108;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a></p>
 
 <h3>Blackslash escapes</h3>
 

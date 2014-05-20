@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Books | BobbyTang Blog]]></title>
   <link href="http://BobbyTang.github.io/blog/categories/books/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
-  <updated>2014-04-29T08:28:41+08:00</updated>
+  <updated>2014-05-21T00:59:37+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
   <author>
     <name><![CDATA[BobbyTang]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Java Performance - OS Monitoring]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/05/21/java-performance-os-monitoring/"/>
+    <updated>2014-05-21T00:16:37+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/05/21/java-performance-os-monitoring</id>
+    <content type="html"><![CDATA[<h2>Bottom Up Approach</h2>
+
+<p>Bottom up begins at the lowest level of the software stack, at the CPU level looking at statistics such as CPU cache misses, inefficient use of CPU instructions, and then working up the software stack at what constructs or idioms are used by the application.</p>
+
+<h2>Choosing the Right CPU Architecture</h2>
+
+<p>One of the major design points behind the SPARC T-series processors is to address CPU cache misses by introducing multiple hardware threads per core.</p>
+
+<h2>CPU Utilization</h2>
+
+<p>A system with a single CPU socket with a quad core processor with hyperthreading disabled will show four CPUs in the GNOME System Monitor and report four virtual processors using the Java API Runtime.availableProcessors().</p>
+
+<pre><code>xosview
+vmstat
+mpstat
+top 
+</code></pre>
+
+<p>Which java thread is consuming CPU?</p>
+
+<pre><code>jstack
+</code></pre>
+
+<h2>Monitoring Linux CPU Scheduler Run Queue</h2>
+
+<pre><code>vmstat
+</code></pre>
+
+<h2>Memory Utilization</h2>
+
+<pre><code>top
+/proc/meminf
+</code></pre>
+
+<p>However, the following vmstat output from a Linux system illustrates a system that is experiencing swapping.  P36</p>
+
+<h2>Monitoring Lock Contention on Linux</h2>
+
+<pre><code>pidstat -w -I -p 9391 5
+</code></pre>
+
+<p>Hence, 3500 divided by 2, the num- ber of virtual processors = 1750. 1750 * 80,000 = 140,000,000. The number of clock cycles in 1 second on a 3.0GHz processor is 3,000,000,000. Thus, the percentage of clock cycles wasted on context switches is 140,000,000/3,000,000,000 = 4.7%.</p>
+
+<p>The cost of a voluntary context switch at a processor clock cycle level is an expensive operation, generally upwards of about 80,000 clock cycles.</p>
+
+<p>Again applying the general guideline of 3% to 5% of clock cycles spent in voluntary context switches implies a Java application that may be suffering from lock contention.</p>
+
+<h2>Quick Lock Contention Monitoring</h2>
+
+<h2>Isolating Hot Locks</h2>
+
+<p>A common practice to find contended locks in a Java application has been to periodically take thread dumps and look for threads that tend to be blocked on the same lock across several thread dumps.</p>
+
+<h2>Monitoring Involuntary Context Switches</h2>
+
+<p>In contrast to voluntary context switching where an executing thread voluntarily takes itself off the CPU, involun- tary thread context switches occur when a thread is taken off the CPU as a result of an expiring time quantum or has been preempted by a higher priority thread.</p>
+
+<p>Involuntary context switches can also be monitored on Linux using <code>pidstat -w</code>. High involuntary context switches are an indication there are more threads ready to run than there are virtual processors available to run them. As a result it is common to observe a high run queue depth in vmstat, high CPU utilization, and a high number of migrations (migrations are the next topic in this section) in conjunction with a large number of involuntary context switches.</p>
+
+<p>On Linux, creation of processor sets and assigning applications to those processor sets can be accomplished using the Linux <code>taskset</code> command.</p>
+
+<h2>Monitoring Thread Migrations</h2>
+
+<p>As a general guideline, Java applications scaling across multiple cores or virtual processors and observing migrations greater than 500 per second could benefit from binding Java applications to processor sets.</p>
+
+<h2>Network I/O Utilization</h2>
+
+<pre><code>netstat -i 
+nicstat
+</code></pre>
+
+<h2>Disk I/O Utilization</h2>
+
+<pre><code>iostat -xm
+</code></pre>
+
+<p>One of the challenges with monitoring disk I/O utilization is identifying which files are being read or written to and which application is the source of the disk activity.</p>
+
+<p>At the application level any strategy to minimize disk activity will help such as reducing the number of read and write operations using buffered input and output streams or integrating a caching data structure into the application to reduce or eliminate disk interaction.</p>
+
+<h2>Additional Command Line Tools</h2>
+
+<pre><code>sar
+</code></pre>
+
+<h2>Monitoring CPU Utilization on SPARC T-Series Systems</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Operating System Concepts - IO System]]></title>
@@ -292,90 +386,6 @@
 <p>Although this scheme decreases the amount of memory needed to store each page table, it increases the amount of time needed to search the table when a page reference occurs.</p>
 
 <p>Systems that use inverted page tables have difficulty implementing shared memory. Shared memory is usually implemented as multiple virtual addresses (one for each process sharing the memory) that are mapped to one physical address. This standard method cannot be used with inverted page tables; because there is only one virtual page entry for every physical page, one physical page cannot have two (or more) shared virtual addresses.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Operating System Concepts - CPU]]></title>
-    <link href="http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu/"/>
-    <updated>2014-04-02T06:30:57+08:00</updated>
-    <id>http://BobbyTang.github.io/blog/2014/04/02/operating-system-concepts-cpu</id>
-    <content type="html"><![CDATA[<h2>CPU Scheduling</h2>
-
-<p><strong>CPU scheduling</strong> is the task of selecting a waiting process from the ready queue and allocating the CPU to it. The CPU is allocated to the selected process by the dispatcher.</p>
-
-<h2>Scheduling Criteria</h2>
-
-<ul>
-<li>CPU utilization</li>
-<li>Throughput</li>
-<li>Turnaround time</li>
-</ul>
-
-
-<p>The interval from the time of submission of a process to the time of completion is the turnaround time. <strong>Turnaround time</strong> is the sum of the periods spent waiting to get into memory, waiting in the ready queue, executing on the CPU, and doing I/O.</p>
-
-<ul>
-<li>Waiting time</li>
-<li>Response time</li>
-</ul>
-
-
-<h2>Scheduling Alogrithm</h2>
-
-<ul>
-<li>First-Come, First-Served Scheduling</li>
-<li>Shortest-Job-First Scheduling</li>
-<li>Priority Scheduling</li>
-</ul>
-
-
-<p>A major problem with priority scheduling algorithms is <strong>indefinite blocking</strong>, or <strong>starvation</strong>.</p>
-
-<p>A solution to the problem of indefinite blockage of low-priority processes is <strong>aging</strong>.</p>
-
-<ul>
-<li>Round-Robin Scheduling</li>
-<li>Multilevel Queue Scheduling</li>
-<li>Multilevel Feedback Queue Scheduling</li>
-</ul>
-
-
-<h2>Multiple-Processor/Multicore Scheduling</h2>
-
-<ul>
-<li>Processor Affinity</li>
-</ul>
-
-
-<p>Because of the high cost of invalidating and repopulating caches, most SMP systems try to avoid migration of processes from one processor to another and instead attempt to keep a process running on the same processor. This is known as <strong>processor affinity</strong>.</p>
-
-<p>Some systems — such as Linux — also provide system calls that support hard affinity, thereby allowing a process to specify that it is not to migrate to other processors.</p>
-
-<p>The main-memory architecture of a system can affect processor affinity issues. Recall the knowledge non-uniform memory access (NUMA) mentioned in previous post, in which a CPU has faster access to some parts of main memory than to other parts.</p>
-
-<ul>
-<li>Load Balancing</li>
-</ul>
-
-
-<p>Load balancing attempts to keep the workload evenly distributed across all processors in an SMP system. It is important to note that load balancing is typically only necessary on systems where each processor has its own private queue of eligible processes to execute.</p>
-
-<p>There are two general approaches to load balancing: <strong>push migration</strong> and <strong>pull migration</strong>. Linux runs its load-balancing algorithm every 200 milliseconds (push migration) or whenever the run queue for a processor is empty (pull migration).</p>
-
-<ul>
-<li>Memory Stall</li>
-</ul>
-
-
-<p>Researchers have discovered that when a processor accesses memory, it spends a significant amount of time waiting for the data to become available. This situation, known as a <strong>memory stall</strong>, may occur for various reasons, such as a <strong>cache miss</strong> (accessing data that are not in cache memory).</p>
-
-<ul>
-<li>Virtualization</li>
-</ul>
-
-
-<p>The virtualization software presents one or more virtual CPUs to each of the virtual machines running on the system and then schedules the use of the physical CPUs among the virtual machines.</p>
 ]]></content>
   </entry>
   
