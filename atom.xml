@@ -4,7 +4,7 @@
   <title><![CDATA[BobbyTang Blog]]></title>
   <link href="http://BobbyTang.github.io/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
-  <updated>2014-05-21T00:59:37+08:00</updated>
+  <updated>2014-05-30T08:40:42+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
   <author>
     <name><![CDATA[BobbyTang]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Install Ruby&amp;Vim Command Without Root]]></title>
+    <link href="http://BobbyTang.github.io/blog/2014/05/30/install-ruby-and-vim-command-without-root/"/>
+    <updated>2014-05-30T08:17:24+08:00</updated>
+    <id>http://BobbyTang.github.io/blog/2014/05/30/install-ruby-and-vim-command-without-root</id>
+    <content type="html"><![CDATA[<p>This post intend to write down the step for installing ruby and vim command line tools, without root access.
+In addition, ncurses is the prerequisities of installing ruby and vim. Also, please install ruby first in order to enable rubyinterp.</p>
+
+<ol>
+<li>download ncurses</li>
+<li><code>tar xvf ncurses-5.9.tar.gz</code></li>
+<li>sh <code>./configure --prefix=/home/bobby/tools/ncurses ##--with-shared</code></li>
+<li><code>make</code></li>
+<li><code>make install</code></li>
+<li>download ruby</li>
+<li>sh <code>./configure --prefix=/home/bobby/tools/ruby1.9 --with-tlib=ncurses</code></li>
+<li><code>make</code></li>
+<li><code>make install</code></li>
+<li>download from vim</li>
+<li><code>bzip2 -cd vimxxx.tar.bz2 | tar xvf -</code></li>
+<li>edit .bash_profile <code>set CPPLAGS="-I/home/bobby/tools/ncurses/include" LDFLAGS="-L/home/bobby/tools/ncurses/lib" export CPPFLAGS LDFLAGS</code></li>
+<li>sh <code>./configure --prefix=/home/bobby/tools/vim7.4 --disable-selinux --enbale-gui=no --without-x --disable-gpm --disable-nls --with-tilib=ncurses --enable-multibyte --enable-rubyinterp --enable-perlinterp --enable-pythoninterp</code></li>
+<li><code>make</code></li>
+<li><code>make install</code></li>
+<li>edit ~/.bashrc <code>alias vim="/home/bobby/tools/vim7.4/bin/vim"</code></li>
+<li>edit ~/.vimrc <code>set synatx on set nocompatible set backspace=2</code></li>
+<li>setup vimruntime in order to let vim find the syntax env, please edit .bash_profile <code>export VIMRUNTIME=/home/bobby/tools/preinstall/vim74/runtime</code></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Java Performance - OS Monitoring]]></title>
@@ -990,7 +1022,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://daringfireball.net/projects/markdown/syntax#em">http://daringfireball.net/projects/markdown/syntax#em</a>
-<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#x61;&#x64;&#x64;&#x72;&#101;&#x73;&#x73;&#64;&#x65;&#x78;&#x61;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#111;&#x6d;">&#97;&#x64;&#x64;&#114;&#101;&#x73;&#115;&#64;&#x65;&#x78;&#x61;&#109;&#112;&#108;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x61;&#x64;&#100;&#x72;&#101;&#115;&#x73;&#64;&#x65;&#x78;&#x61;&#109;&#112;&#108;&#x65;&#46;&#99;&#111;&#x6d;">&#97;&#100;&#100;&#114;&#x65;&#x73;&#115;&#64;&#101;&#x78;&#97;&#109;&#112;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;</a></p>
 
 <h3>Blackslash escapes</h3>
 

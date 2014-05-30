@@ -9,7 +9,8 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="Bottom Up Approach Bottom up begins at the lowest level of the software stack, at the CPU level looking at statistics such as CPU cache misses, &hellip;">
+  <meta name="description" content="This post intend to write down the step for installing ruby and vim command line tools, without root access.
+In addition, ncurses is the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/30/install-ruby-and-vim-command-without-root/">Install Ruby&amp;Vim Command Without Root</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-30T08:17:24+08:00" pubdate data-updated="true">May 30<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/05/30/install-ruby-and-vim-command-without-root/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/05/30/install-ruby-and-vim-command-without-root/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post intend to write down the step for installing ruby and vim command line tools, without root access.
+In addition, ncurses is the prerequisities of installing ruby and vim. Also, please install ruby first in order to enable rubyinterp.</p>
+
+<ol>
+<li>download ncurses</li>
+<li><code>tar xvf ncurses-5.9.tar.gz</code></li>
+<li>sh <code>./configure --prefix=/home/bobby/tools/ncurses ##--with-shared</code></li>
+<li><code>make</code></li>
+<li><code>make install</code></li>
+<li>download ruby</li>
+<li>sh <code>./configure --prefix=/home/bobby/tools/ruby1.9 --with-tlib=ncurses</code></li>
+<li><code>make</code></li>
+<li><code>make install</code></li>
+<li>download from vim</li>
+<li><code>bzip2 -cd vimxxx.tar.bz2 | tar xvf -</code></li>
+<li>edit .bash_profile <code>set CPPLAGS="-I/home/bobby/tools/ncurses/include" LDFLAGS="-L/home/bobby/tools/ncurses/lib" export CPPFLAGS LDFLAGS</code></li>
+<li>sh <code>./configure --prefix=/home/bobby/tools/vim7.4 --disable-selinux --enbale-gui=no --without-x --disable-gpm --disable-nls --with-tilib=ncurses --enable-multibyte --enable-rubyinterp --enable-perlinterp --enable-pythoninterp</code></li>
+<li><code>make</code></li>
+<li><code>make install</code></li>
+<li>edit ~/.bashrc <code>alias vim="/home/bobby/tools/vim7.4/bin/vim"</code></li>
+<li>edit ~/.vimrc <code>set synatx on set nocompatible set backspace=2</code></li>
+<li>setup vimruntime in order to let vim find the syntax env, please edit .bash_profile <code>export VIMRUNTIME=/home/bobby/tools/preinstall/vim74/runtime</code></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -958,76 +1021,6 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">SQL - SybaseASE - Alternative Way to Support LEAD/LAG Function</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-10T01:32:05+08:00" pubdate data-updated="true">Mar 10<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/#disqus_thread"
-             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/10/sql-sybasease-alternative-way-to-support-lead-slash-lag-function/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There is audit trial requirement that need to be captured into log table these day. But we suffer from the limited function provided by Sybase ASE DB in order to achieve our goals. SybaseASE 12.5 does not support neither analytic function nor row number column, and therefore we have to implement cross comparison by ourselves via basic semantics.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--create rownum column</span>
-</span><span class='line'><span class="k">select</span> <span class="n">rownum</span> <span class="o">=</span> <span class="k">identity</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="o">*</span> <span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
-</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span>
-</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="o">#</span><span class="n">temp_table</span>
-</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">table_history</span> <span class="k">where</span> <span class="n">pid</span> <span class="o">=</span> <span class="o">@</span><span class="n">pid</span> <span class="k">order</span> <span class="k">by</span> <span class="n">audit_update_date</span> <span class="k">desc</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">--use self-join to match the cross rows</span>
-</span><span class='line'><span class="k">select</span> <span class="n">a</span><span class="p">.</span><span class="n">rownum</span><span class="p">,</span>
-</span><span class='line'>      <span class="k">case</span> <span class="k">when</span> <span class="n">a</span><span class="p">.</span><span class="n">col1</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">col1</span> <span class="k">then</span> <span class="s1">&#39;equal&#39;</span> <span class="k">else</span> <span class="s1">&#39;inequal&#39;</span> <span class="k">end</span>
-</span><span class='line'><span class="k">from</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">a</span> <span class="k">left</span> <span class="k">out</span> <span class="k">join</span> <span class="o">#</span><span class="n">temp_table</span> <span class="n">b</span> <span class="k">on</span> <span class="p">(</span> <span class="n">a</span><span class="p">.</span><span class="n">pid</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">pid</span> <span class="k">and</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rownum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">rownum</span> <span class="p">)</span>
-</span><span class='line'><span class="k">where</span> <span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In contrast, we also provide oracle version of implementation.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1041,8 +1034,9 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
     <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/devenvsetup/'>DevEnvSetup (1)</a></li>
+    <li class='category'><a href='/blog/categories/devenvsetup/'>DevEnvSetup (2)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (1)</a></li>
+<li class='category'><a href='/blog/categories/ruby/'>Ruby (1)</a></li>
 <li class='category'><a href='/blog/categories/books/'>books (8)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>sql (2)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
@@ -1052,6 +1046,10 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/30/install-ruby-and-vim-command-without-root/">Install Ruby&amp;Vim Command Without Root</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/05/21/java-performance-os-monitoring/">Java Performance - OS Monitoring</a>
@@ -1067,10 +1065,6 @@ In the traditional meaning of the term, as used in Unix System V and Solaris, a 
     
       <li class="post">
         <a href="/blog/2014/04/27/operating-system-concepts-memorymapped-file/">Operating System Concepts - MemoryMapped File</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/23/todo-reading-book-list/">TODO Reading Book List</a>
       </li>
     
   </ul>

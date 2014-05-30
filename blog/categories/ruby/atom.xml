@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: DevEnvSetup | BobbyTang Blog]]></title>
-  <link href="http://BobbyTang.github.io/blog/categories/devenvsetup/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Ruby | BobbyTang Blog]]></title>
+  <link href="http://BobbyTang.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://BobbyTang.github.io/"/>
   <updated>2014-05-30T08:40:42+08:00</updated>
   <id>http://BobbyTang.github.io/</id>
@@ -40,33 +40,6 @@ In addition, ncurses is the prerequisities of installing ruby and vim. Also, ple
 <li>edit ~/.bashrc <code>alias vim="/home/bobby/tools/vim7.4/bin/vim"</code></li>
 <li>edit ~/.vimrc <code>set synatx on set nocompatible set backspace=2</code></li>
 <li>setup vimruntime in order to let vim find the syntax env, please edit .bash_profile <code>export VIMRUNTIME=/home/bobby/tools/preinstall/vim74/runtime</code></li>
-</ol>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Python Environment Setup]]></title>
-    <link href="http://BobbyTang.github.io/blog/2014/04/29/python-environment-setup/"/>
-    <updated>2014-04-29T08:10:26+08:00</updated>
-    <id>http://BobbyTang.github.io/blog/2014/04/29/python-environment-setup</id>
-    <content type="html"><![CDATA[<p>Python is a script language, the main idea for learning python is to utilize python to create easy hands-on automation script on linux env instead of shell.</p>
-
-<p>Here, list the steps to configure PyDev, an eclipse plugin, inside eclipse environment.</p>
-
-<ol>
-<li>Access PyDev webpage: <a href="http://pydev.org/manual_101_install.html">http://pydev.org/manual_101_install.html</a></li>
-<li>Download PyDev certificate</li>
-<li>cd %JAVA_HOME%/bin</li>
-<li>Run command: keytool.exe -import -file C:/download/pydev_certificate.cer -keystore %JAVA_HOME%/jre/lib/security/cacerts</li>
-<li>Input default JDK cacerts password: changeit</li>
-<li>Certificate installment completed</li>
-<li>Download eclipse plugin on marketplace, or mannually download it and extract into dropins directory like: (dropins/pydev/eclipse/&hellip;)</li>
-<li>Edit eclipse.ini, convert -vm=&hellip; JDK must be 1.7</li>
-<li>Access JPython webpage: <a href="https://wiki.python.org/jython/InstallationInstructions">https://wiki.python.org/jython/InstallationInstructions</a></li>
-<li>Download Jython 2.5.4rc1 &ndash; Traditional Installer at link: <a href="http://jython.org/downloads.html">http://jython.org/downloads.html</a></li>
-<li>Run command: java -jar jython_installer-2.5.2.jar &mdash;console</li>
-<li>Configure JPython interceptor in PvDev eclipse plugin</li>
 </ol>
 
 ]]></content>
