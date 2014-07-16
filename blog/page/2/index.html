@@ -9,7 +9,7 @@
   <meta name="author" content="BobbyTang">
 
   
-  <meta name="description" content="There is audit trial requirement that need to be captured into log table these day. But we suffer from the limited function provided by Sybase ASE DB &hellip;">
+  <meta name="description" content="Process Control Block Process Control Block (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,162 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Operating System Concepts - Process/Thread</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-25T05:57:31+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/25/operating-system-concepts-process-slash-thread/#disqus_thread"
+             data-disqus-identifier="http://BobbyTang.github.io/blog/2014/03/25/operating-system-concepts-process-slash-thread/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Process Control Block</h2>
+
+<p><strong>Process Control Block</strong> (PCB, also called Task Controlling Block, Task Struct, or Switchframe) is a data structure in the operating system kernel containing the information needed to manage a particular process.</p>
+
+<p>Process state. The state may be new, ready, running, waiting, halted, and so on.</p>
+
+<p>Program counter. The counter indicates the address of the next instruction to be executed for this process.</p>
+
+<p>CPU registers. They include accumulators, index registers, stack pointers, and general-purpose registers, plus any condition-code information. Along with the program counter, this state information must be saved when an interrupt occurs, to allow the process to be continued correctly afterward.</p>
+
+<p>CPU-scheduling information. This information includes a process priority, pointers to scheduling queues, and any other scheduling parameters.</p>
+
+<p>Memory-management information. This information may include such information as the value of the base and limit registers, the page tables, or the segment tables, depending on the memory system used by the operating system.</p>
+
+<p>Accounting information. This information includes the amount of CPU and real time used, time limits, account numbers, job or process numbers, and so on.</p>
+
+<p>I/O status information. This information includes the list of I/O devices allocated to the process, a list of open files, and so on.</p>
+
+<h2>Context Switch</h2>
+
+<p>A <strong>context switch</strong> (also sometimes referred to as a process switch or a task switch) is the switching of the CPU (central processing unit) from one process or thread to another.</p>
+
+<p>A <strong>context</strong> is the contents of a CPU&rsquo;s registers and program counter at any point in time.</p>
+
+<p>A <strong>program counter</strong> is a specialized register that indicates the position of the CPU in its instruction sequence and which holds either the address of the instruction being executed or the address of the next instruction to be executed, depending on the specific system.</p>
+
+<p>Context switching can be described in slightly more detail as the kernel (i.e., the core of the operating system) performing the following activities with regard to processes (including threads) on the CPU:</p>
+
+<ol>
+<li><p>suspending the progression of one process and storing the CPU&rsquo;s state (i.e., the context) for that process somewhere in memory,</p></li>
+<li><p>retrieving the context of the next process from memory and restoring it in the CPU&rsquo;s registers and</p></li>
+<li><p>returning to the location indicated by the program counter (i.e., returning to the line of code at which the process was interrupted) in order to resume the process.</p></li>
+</ol>
+
+
+<h3>When to switch?</h3>
+
+<p>Context switches can occur only in kernel mode.</p>
+
+<p><strong>Multitasking</strong> 1.)Preemptive schedulers often configure a timer interrupt to fire when a process exceeds its time slice. 2.)This context switch can be triggered by the process making itself unrunnable, such as by waiting for an I/O or synchronization operation to complete.</p>
+
+<p><strong>Interrupt handling</strong> 1.) Hardware interrupt</p>
+
+<p><strong>User and kernel mode switching</strong> may cause context switch.</p>
+
+<h2>Multithread programing</h2>
+
+<p>Benifits 1.) Responsiveness 2.)Resource sharing 3.) Economy 4.)Scalability</p>
+
+<h2>Multicore Programming</h2>
+
+<p>Concerns 1.) Dividing activities 2.)Balance Data splitting 3.)Data dependency 4.)Testing and debugging</p>
+
+<h2>Multithread Model</h2>
+
+<ul>
+<li>Many-to-one model</li>
+<li>One-to-one model</li>
+</ul>
+
+
+<p>The nptl(native posix thread library) implementation only uses a 1:1 thread model. The scheduler handles every thread as if it were a process. Therefore only the supported scope is PTHREAD_SCOPE_SYSTEM(Plesae see on Pthread Scheduling label). The default scheduling policy is SCHED_OTHER, which is the default Linux scheduler. The nptl implementation can utilize multiple CPUs.</p>
+
+<ul>
+<li>Many-to-many model</li>
+<li>Green thread</li>
+</ul>
+
+
+<p>On multi-CPU machines, native threads can run more than one thread simultaneously by assigning different threads to different CPUs. Green threads run on only one CPU.</p>
+
+<p>Green threads, the threads provided by the JVM, run at the user level, meaning that the JVM creates and schedules the threads itself. Therefore, the operating system kernel doesn&rsquo;t create or schedule them. Instead, the underlying OS sees the JVM only as one thread.</p>
+
+<ul>
+<li>Light weight process(LWP)
+In the traditional meaning of the term, as used in Unix System V and Solaris, a LWP runs in user space on top of a single kernel thread and shares its address space and system resources with other LWPs within the same process.</li>
+</ul>
+
+
+<h2>Pthread Scheduling</h2>
+
+<p>There are two possible contention scopes. PTHREAD_SCOPE_SYSTEM and PTHREAD_SCOPE_PROCESS. They can be set with pthread_attr_setscope(). The scope of a thread can only be specified before the thread is created.</p>
+
+<ul>
+<li>PTHREAD_SCOPE_SYSTEM</li>
+</ul>
+
+
+<p>A thread that has a scope of PTHREAD_SCOPE_SYSTEM will content with other processes and other PTHREAD_SCOPE_SYSTEM threads for the CPU.</p>
+
+<ul>
+<li>PTHREAD_SCOPE_PROCESS</li>
+</ul>
+
+
+<p>All threads of a process that have a scope of PTHREAD_SCOPE_PROCESS will be grouped together and this group of threads contents for the CPU. If there is a process with 4 PTHREAD_SCOPE_PROCESS threads and 4 PTHREAD_SCOPE_SYSTEM threds, then each of the PTHREAD_SCOPE_SYSTEM threads will get a fifth of the CPU and the other 4 PTHREAD_SCOPE_PROCESS threads will share the remaing fifth of the CPU. How the PTHREAD_SCOPE_PROCESS threads share their fifth of the CPU among themselves is determined by the scheduling policy and the thread&rsquo;s priority.</p>
+
+<h2>Process Creation</h2>
+
+<p>When a process creates a new process, two possibilities exist in terms of execution:</p>
+
+<ol>
+<li>The parent continues to execute concurrently with its children.</li>
+<li>The parent waits until some or all of its children have terminated.</li>
+</ol>
+
+
+<p>There are also two possibilities in terms of the address space of the new process:</p>
+
+<ol>
+<li>The child process is a duplicate of the parent process (it has the same program and data as the parent).</li>
+<li>The child process has a new program loaded into it.</li>
+</ol>
+
+
+<p>For example, if <code>clone()</code> is passed the flags <code>CLONE FS</code>, <code>CLONE VM</code>, <code>CLONE SIGHAND</code>, and <code>CLONE FILES</code>, the parent and child tasks will share the same file-system information (such as the current working directory), the same memory space, the same signal handlers, and the same set of open files.</p>
+
+<p>However, if none of these flags is set when <code>clone()</code> is invoked, no sharing takes place, resulting in functionality similar to that provided by the <code>fork()</code> system call.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -537,7 +693,7 @@ Please don&rsquo;t use any <code>&lt;blink&gt;</code> tags.</p>
 <h3>Automatic link</h3>
 
 <p><a href="http://daringfireball.net/projects/markdown/syntax#em">http://daringfireball.net/projects/markdown/syntax#em</a>
-<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x61;&#x64;&#100;&#x72;&#101;&#115;&#x73;&#64;&#x65;&#x78;&#x61;&#109;&#112;&#108;&#x65;&#46;&#99;&#111;&#x6d;">&#97;&#100;&#100;&#114;&#x65;&#x73;&#115;&#64;&#101;&#x78;&#97;&#109;&#112;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;</a></p>
+<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#x3a;&#x61;&#100;&#x64;&#114;&#x65;&#115;&#115;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#x64;&#x64;&#114;&#101;&#x73;&#x73;&#64;&#101;&#120;&#97;&#x6d;&#x70;&#108;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
 
 <h3>Blackslash escapes</h3>
 
@@ -590,6 +746,10 @@ _   underscore
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/16/frontend-javascript-framework-alternatives/">Frontend JavaScript Framework Alternatives</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/30/install-ruby-and-vim-command-without-root/">Install Ruby&amp;Vim Command Without Root</a>
       </li>
     
@@ -603,10 +763,6 @@ _   underscore
     
       <li class="post">
         <a href="/blog/2014/04/27/operating-system-concepts-io-system/">Operating System Concepts - IO System</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/27/operating-system-concepts-memorymapped-file/">Operating System Concepts - MemoryMapped File</a>
       </li>
     
   </ul>
